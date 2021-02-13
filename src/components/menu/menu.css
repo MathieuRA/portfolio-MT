@@ -1,6 +1,8 @@
 #menu {
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  width: 100%;
 }
 #menu ul {
   color: var(--main-grey);
@@ -8,6 +10,18 @@
   list-style-type: none;
   padding-left: 0;
 }
-#menu > a {
+#menu .divisedMenu {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  width: 50%;
+}
+#menu .divisedMenu > ul {
+  margin: 0;
+}
+#menu .divisedMenu > ul li {
+  padding: 0 20px;
+}
+#menu .divisedMenu > a {
   color: var(--main-blue);
 }

@@ -7,16 +7,12 @@ import './app.css'
 
 const ITEMS_NAVIGATION: IMenu = {
   contact: 'contact',
-  linkMenu: [
-    'corporate',
-    'events',
-    'fiction',
-    'post-production',
-  ],
+  leftPart: ['corporate', 'events'],
   logo: {
+    alt: 'logo',
     src: 'path',
-    alt: 'Logo ',
   },
+  rightPart: ['fiction', 'post-production'],
 }
 
 function App() {

@@ -1,8 +1,9 @@
 export default interface IMenu {
   contact: string
-  linkMenu: string[]
+  leftPart: string[]
   logo: {
     alt: string
     src: string
   }
+  rightPart: string[]
 }

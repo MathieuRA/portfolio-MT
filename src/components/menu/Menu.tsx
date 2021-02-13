@@ -8,21 +8,61 @@ interface PropsMenu {
   itemsNavigation: IMenu
 }
 const Menu: FC<PropsMenu> = ({ itemsNavigation }) => {
-  const { contact, linkMenu, logo } = itemsNavigation
-  const { src, alt } = logo
+  const {
+    contact,
+    leftPart,
+    logo,
+    rightPart,
+  } = itemsNavigation
+  const { alt, src } = logo
+
   return (
     <nav id='menu'>
-      {console.log('ok')}
-      <img src={src} alt={alt} />
-      <ul>
-        {linkMenu.map((link, index) => (
-          <li key={index}>
-            <a>{link.toUpperCase()}</a>
-          </li>
-        ))}
-      </ul>
-      <a>{contact.toUpperCase()}</a>
+      <MenuSection position={'left'} items={leftPart}>
+        <img src={src} alt={alt} />
+      </MenuSection>
+      <MenuSection position={'right'} items={rightPart}>
+        <a>{contact.toUpperCase()}</a>
+      </MenuSection>
     </nav>
+  )
+}
+
+interface MenuSectionProps {
+  items: string[]
+  position: string
+}
+const MenuSection: FC<MenuSectionProps> = ({
+  children,
+  items,
+  position,
+}) => {
+  return (
+    <div className='divisedMenu'>
+      {position === 'left' ? (
+        <>
+          {children}
+          <ul>
+            {items.map((item) => (
+              <li>
+                <a>{item}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <>
+          <ul>
+            {items.map((item) => (
+              <li>
+                <a>{item}</a>
+              </li>
+            ))}
+          </ul>
+          {children}
+        </>
+      )}
+    </div>
   )
 }
 
