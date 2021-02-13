@@ -4,6 +4,7 @@
   "editor.wordWrap": "on",
   "prettier.semi": false,
   "prettier.jsxSingleQuote": true,
+  "prettier.singleQuote": true,
   "prettier.printWidth": 60,
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
