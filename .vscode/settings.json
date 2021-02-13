@@ -1,0 +1,9 @@
+{
+  "window.zoomLevel": 0,
+  "editor.formatOnSave": true,
+  "editor.wordWrap": "on",
+  "prettier.semi": false,
+  "prettier.jsxSingleQuote": true,
+  "prettier.printWidth": 60,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
