@@ -8,6 +8,10 @@
   --main-gold: #b38d46;
   --main-blue: #4b8a9f;
 }
+html {
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
 body {
   margin: 0;
 }
