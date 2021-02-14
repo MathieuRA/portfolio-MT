@@ -1,5 +1,4 @@
 #active {
-  border-left: 1px solid var(--main-gold);
   position: relative;
 }
 
@@ -8,9 +7,10 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  height: 1px;
-  width: 70%;
-  border-bottom: 1px solid var(--main-gold);
+  height: 100% !important;
+  width: 70% !important;
+  border-bottom: 1px solid var(--main-gold) !important;
+  border-left: 1px solid var(--main-gold) !important;
 }
 
 #menu {
@@ -40,12 +40,32 @@
   margin: auto;
   padding: 0 10px;
 }
-#menu .divisedMenu > ul li > a {
+
+#menu .divisedMenu a::before {
+  bottom: 0;
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 0%;
+  width: 0%;
+  transition: all 0.5s;
+  border-bottom: 0px solid var(--main-gold);
+  border-left: 0px solid var(--main-gold);
+}
+#menu .divisedMenu a:hover:before {
+  border-bottom: 1px solid var(--main-gold);
+  border-left: 1px solid var(--main-gold);
+  height: 100%;
+  width: 70%;
+}
+
+#menu .divisedMenu a {
   color: var(--main-grey);
   padding: 5px;
+  position: relative;
 }
 
 #menu .divisedMenu > a {
-  color: var(--main-blue);
+  color: var(--main-blue) !important;
   margin: auto 0;
 }
