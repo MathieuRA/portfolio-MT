@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { BaseSyntheticEvent, FC } from 'react'
 
 interface PropsLink {
   anchor?: boolean
@@ -10,11 +10,28 @@ const Link: FC<PropsLink> = ({
   label,
   to,
 }) => {
+  const isActive = window.location.hash === `#${to}`
+  const homePage = window.location.hash === ''
+  const firstElement = to === 'corporate'
+  let active
+
+  homePage && firstElement && (active = 'active')
+  isActive && (active = 'active')
   return (
-    <a className='customLink' href={anchor ? `#${to}` : to}>
+    <a
+      onClick={setActive}
+      className={`customLink ${active}`}
+      id={active}
+      href={anchor ? `#${to}` : to}
+    >
       {label}
     </a>
   )
+}
+
+const setActive = (e: BaseSyntheticEvent) => {
+  document.getElementById('active')?.removeAttribute('id')
+  e.target.id = 'active'
 }
 
 export default Link

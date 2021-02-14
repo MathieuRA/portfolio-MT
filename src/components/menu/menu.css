@@ -1,3 +1,18 @@
+#active {
+  border-left: 1px solid var(--main-gold);
+  position: relative;
+}
+
+#active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 70%;
+  border-bottom: 1px solid var(--main-gold);
+}
+
 #menu {
   display: flex;
   justify-content: space-between;
@@ -6,7 +21,6 @@
   font-family: 'montserrat';
 }
 #menu ul {
-  color: var(--main-grey);
   display: flex;
   list-style-type: none;
   padding-left: 0;
@@ -28,7 +42,9 @@
 }
 #menu .divisedMenu > ul li > a {
   color: var(--main-grey);
+  padding: 5px;
 }
+
 #menu .divisedMenu > a {
   color: var(--main-blue);
   margin: auto 0;
