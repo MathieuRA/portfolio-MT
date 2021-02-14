@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import { IMenu } from '../../interfaces'
+import { Link } from '../templates'
 
 import './menu.css'
 
@@ -19,10 +20,14 @@ const Menu: FC<PropsMenu> = ({ itemsNavigation }) => {
   return (
     <nav id='menu'>
       <MenuSection position={'left'} items={leftPart}>
-        <img src={src} alt={alt} />
+        <img
+          alt={alt}
+          src={src}
+          style={{ width: 110, height: 'auto' }}
+        />
       </MenuSection>
       <MenuSection position={'right'} items={rightPart}>
-        <a>{contact.toUpperCase()}</a>
+        <Link label={contact.toUpperCase()} to={contact} />
       </MenuSection>
     </nav>
   )
@@ -43,9 +48,13 @@ const MenuSection: FC<MenuSectionProps> = ({
         <>
           {children}
           <ul>
-            {items.map((item) => (
-              <li>
-                <a>{item}</a>
+            {items.map((item, i) => (
+              <li key={i}>
+                <Link
+                  anchor
+                  label={item.toUpperCase()}
+                  to={item}
+                />
               </li>
             ))}
           </ul>
@@ -53,9 +62,13 @@ const MenuSection: FC<MenuSectionProps> = ({
       ) : (
         <>
           <ul>
-            {items.map((item) => (
-              <li>
-                <a>{item}</a>
+            {items.map((item, i) => (
+              <li key={i}>
+                <Link
+                  anchor
+                  label={item.toUpperCase()}
+                  to={item}
+                />
               </li>
             ))}
           </ul>

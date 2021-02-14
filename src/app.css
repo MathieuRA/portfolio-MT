@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url('./fonts/Montserrat-Regular.ttf');
+}
+
 :root {
   --main-grey: #c8cabd;
   --main-gold: #b38d46;
@@ -5,4 +10,7 @@
 }
 body {
   margin: 0;
+}
+.customLink {
+  text-decoration: none;
 }

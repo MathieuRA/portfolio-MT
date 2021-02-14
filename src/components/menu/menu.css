@@ -3,6 +3,7 @@
   justify-content: space-between;
   position: fixed;
   width: 100%;
+  font-family: 'montserrat';
 }
 #menu ul {
   color: var(--main-grey);
@@ -13,15 +14,22 @@
 #menu .divisedMenu {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  padding: 10px;
   width: 50%;
 }
 #menu .divisedMenu > ul {
   margin: 0;
+  width: 40%;
 }
 #menu .divisedMenu > ul li {
-  padding: 0 20px;
+  font-size: 17px;
+  margin: auto;
+  padding: 0 10px;
+}
+#menu .divisedMenu > ul li > a {
+  color: var(--main-grey);
 }
 #menu .divisedMenu > a {
   color: var(--main-blue);
+  margin: auto 0;
 }
