@@ -1,4 +1,5 @@
-import React, { BaseSyntheticEvent, FC } from 'react'
+import { BaseSyntheticEvent, FC } from 'react'
+import { Data } from '../../../utils'
 
 interface PropsLink {
   anchor?: boolean
@@ -10,13 +11,15 @@ const Link: FC<PropsLink> = ({
   label,
   to,
 }) => {
-  const isActive = window.location.hash === `#${to}`
+  const activePath = window.location.hash === `#${to}`
   const homePage = window.location.hash === ''
-  const firstElement = to === 'corporate'
-  let active
+  // If any hash are set into the URL, we are setting the first item menu as 'active'
+  const isFirstElement =
+    to === Data.getInstance().getMenuItems()[0]
+  let active = ''
 
-  homePage && firstElement && (active = 'active')
-  isActive && (active = 'active')
+  homePage && isFirstElement && (active = 'active')
+  activePath && (active = 'active')
   return (
     <a
       onClick={setActive}
