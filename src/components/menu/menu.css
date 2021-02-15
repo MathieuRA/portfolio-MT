@@ -34,7 +34,7 @@
 }
 #menu .divisedMenu > ul {
   margin: 0;
-  width: 40%;
+  min-width: 40%;
 }
 #menu .divisedMenu > ul li {
   font-size: 17px;

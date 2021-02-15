@@ -1,45 +1,36 @@
 import React from 'react'
 
-import { IMenu } from './interfaces'
-import { Menu } from './components'
+import { Data } from './utils'
+import { Menu, Page } from './components'
 
 import './app.css'
-import { Page } from './components/templates'
 
-const MENU_ITEM = [
-  'corporate',
-  'events',
-  'fiction',
-  'post-production',
-]
-
-const ITEMS_NAVIGATION: IMenu = {
-  contact: 'contact',
-  leftPart: [MENU_ITEM[0], MENU_ITEM[1]],
-  logo: {
-    alt: 'logo',
-    src: 'assets/logo.png',
-  },
-  rightPart: [MENU_ITEM[2], MENU_ITEM[3]],
-}
-
-const SLIDERONE = ['CORPORATE1G.svg', 'PUB1G.svg']
+const data = Data.getInstance()
+const sliderImgs = data.getSliderImgs()
 
 function App() {
   return (
     <div
       className='App'
       style={{
-        height: '100vh',
-        display: 'flex',
-        width: `${MENU_ITEM.length}00%`,
+        width: `${data.getMenuItemsLenght()}00%`,
       }}
     >
-      <Menu itemsNavigation={ITEMS_NAVIGATION} />
-      <Page anchor={'corporate'} sliderImg={SLIDERONE} />
-      <Page anchor={'events'} sliderImg={[]} />
-      <Page anchor={'fiction'} sliderImg={[]} />
-      <Page anchor={'post-production'} sliderImg={[]} />
+      <Menu itemsNavigation={data.getNavigation()} />
+      {data.getMenuItems().map((item, index) => {
+        if (typeof sliderImgs[item] === 'undefined') {
+          throw new Error(
+            `You forget to add slider to your page: ${item}, please verify your menu configuration`
+          )
+        }
+        return (
+          <Page
+            anchor={item}
+            key={index}
+            sliderImg={sliderImgs[item]}
+          />
+        )
+      })}
     </div>
   )
 }

@@ -21,8 +21,9 @@ const Slider: FC<PropsSlider> = ({ imgs }) => {
         loop
         interval={5000}
       >
-        {imgs.map((img) => (
+        {imgs.map((img, index) => (
           <embed
+            key={index}
             src={`./assets/img/${img}`}
             style={STYLE_EMBED}
           />
