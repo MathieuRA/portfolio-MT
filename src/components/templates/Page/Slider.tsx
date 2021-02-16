@@ -16,12 +16,13 @@ const Slider: FC<PropsSlider> = ({ imgs }) => {
     <div className='slider'>
       <Carousel
         auto
-        axis={'y'}
+        axis={'x'}
         duration={700}
         loop
         interval={5000}
       >
         {imgs.map((img, index) => (
+          // FIXME TO IMG WHEN I GOT THE IMG
           <embed
             key={index}
             src={`./assets/img/${img}`}

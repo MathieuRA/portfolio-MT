@@ -1,16 +1,31 @@
 #active {
   position: relative;
 }
+/* Avoid border animation on the current tab */
+#active:hover {
+  color: var(--main-grey) !important;
+}
 
+#active:hover::before {
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+}
+#active:hover::after {
+  border-top: 1px solid transparent !important;
+  border-right: 1px solid transparent !important;
+}
+#active:focus::after {
+  transition: none !important;
+}
+/* */
 #active::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: 10% !important;
   bottom: 0;
   height: 100% !important;
-  width: 70% !important;
-  border-bottom: 1px solid var(--main-gold) !important;
-  border-left: 1px solid var(--main-gold) !important;
+  width: 80% !important;
+  border-top: 1px solid var(--main-gold) !important;
 }
 
 #menu {
@@ -42,22 +57,45 @@
   padding: 0 10px;
 }
 
-#menu .divisedMenu a::before {
-  bottom: 0;
+#menu .divisedMenu a {
+  box-sizing: border-box;
+}
+#menu .divisedMenu a::before,
+#menu .divisedMenu a::after {
+  box-sizing: inherit;
   content: '';
   position: absolute;
-  left: 0;
   height: 0%;
   width: 0%;
-  transition: all 0.5s;
-  border-bottom: 0px solid var(--main-gold);
-  border-left: 0px solid var(--main-gold);
+  border: 1px solid transparent;
 }
-#menu .divisedMenu a:hover:before {
-  border-bottom: 1px solid var(--main-gold);
-  border-left: 1px solid var(--main-gold);
+#menu .divisedMenu a::before {
+  bottom: 0;
+  left: 0;
+}
+#menu .divisedMenu a::after {
+  top: 0;
+  right: 0;
+}
+#menu .divisedMenu a:hover::before,
+#menu .divisedMenu a:hover::after {
   height: 100%;
-  width: 70%;
+  width: 100%;
+}
+#menu .divisedMenu a:hover::before {
+  border-bottom-color: var(--main-gold);
+  border-left-color: var(--main-gold);
+  transition: width 0.25s ease-out, height 0.25s ease-out;
+}
+#menu .divisedMenu a:hover::after {
+  border-top-color: var(--main-gold);
+  border-right-color: var(--main-gold);
+  transition: border-color 0s ease-out 0.25s,
+    width 0.25s ease-out 0.25s, height 0.25s ease-out 0.25s;
+}
+
+#menu .divisedMenu a:hover {
+  color: var(--main-gold);
 }
 
 #menu .divisedMenu a {

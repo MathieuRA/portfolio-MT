@@ -10,12 +10,7 @@ const sliderImgs = data.getSliderImgs()
 
 function App() {
   return (
-    <div
-      className='App'
-      style={{
-        width: `${data.getMenuItemsLenght()}00%`,
-      }}
-    >
+    <div className='App'>
       <Menu itemsNavigation={data.getNavigation()} />
       {data.getMenuItems().map((item, index) => {
         if (typeof sliderImgs[item] === 'undefined') {

@@ -17,7 +17,6 @@ body {
 }
 .App {
   height: 100vh;
-  display: flex;
 }
 .customLink {
   text-decoration: none;
