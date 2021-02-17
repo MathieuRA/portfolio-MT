@@ -17,14 +17,17 @@
 #active:focus::after {
   transition: none !important;
 }
+#active::before {
+  transition: none !important;
+}
 /* */
 #active::before {
   content: '';
   position: absolute;
-  left: 10% !important;
+  left: 20% !important;
   bottom: 0;
   height: 100% !important;
-  width: 80% !important;
+  width: 60% !important;
   border-top: 1px solid var(--main-gold) !important;
 }
 
@@ -100,7 +103,7 @@
 
 #menu .divisedMenu a {
   color: var(--main-grey);
-  padding: 5px;
+  padding: 10px;
   position: relative;
 }
 
