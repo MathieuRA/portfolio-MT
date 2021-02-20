@@ -2,7 +2,7 @@ import config from '../config.json'
 
 import { IMenu, ISliderConfiguration } from '../interfaces'
 
-const { menu, slider } = config
+const { content, menu, slider } = config
 const { contact, item, logo } = menu
 const { leftPart, rightPart } = item
 
@@ -72,6 +72,22 @@ class Data {
    */
   public getSliderImgs(): ISliderConfiguration {
     return slider
+  }
+
+  /**
+   * getContent return the content of one section
+   *
+   * ```typescript
+   * {
+   *    title: string,
+   *    text: string
+   * }
+   * ```
+   *
+   * @return object
+   */
+  public getContent(section: string) {
+    return content[section]
   }
 }
 

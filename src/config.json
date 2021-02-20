@@ -15,5 +15,23 @@
     "events": ["CORPORATE1G.svg", "PUB1G.svg"],
     "fiction": ["CORPORATE1G.svg", "PUB1G.svg"],
     "post-production": ["CORPORATE1G.svg", "PUB1G.svg"]
+  },
+  "content": {
+    "corporate": {
+      "title": "film institutionnel et pub",
+      "text": "Un texte et une série ou écrite de mots perçus comme constituant un ensemble cohérent, porteur de sens et utilisant les structures propres à une langue. Un texte n'a pas de longueur déterminée sauf dans le cas de poèmes à forme fixe comme le sonnet ou le haïku"
+    },
+    "events": {
+      "title": "EVENTS",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita sint repellat at doloribus, assumenda reprehenderit quidem, itaque asperiores, magnam culpa ullam! Eaque fuga dolorum cupiditate sed. Laboriosam, doloremque. Atque, debitis!"
+    },
+    "fiction": {
+      "title": "FICTION",
+      "text": "Un texte et une série ou écrite de mots perçus comme constituant un ensemble cohérent, porteur de sens et utilisant les structures propres à une langue. Un texte n'a pas de longueur déterminée sauf dans le cas de poèmes à forme fixe comme le sonnet ou le haïku"
+    },
+    "post-production": {
+      "title": "POST-PROD",
+      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita sint repellat at doloribus, assumenda reprehenderit quidem, itaque asperiores, magnam culpa ullam! Eaque fuga dolorum cupiditate sed. Laboriosam, doloremque. Atque, debitis!"
+    }
   }
 }

@@ -16,7 +16,7 @@ const Page: FC<PropsPage> = ({ anchor, sliderImg }) => {
   return (
     <section id={anchor} style={STYLE}>
       <Slider imgs={sliderImg} />
-      <Section />
+      <Section section={anchor} />
     </section>
   )
 }
