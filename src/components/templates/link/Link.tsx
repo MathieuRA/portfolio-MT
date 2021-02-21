@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, FC } from 'react'
+import { FC } from 'react'
 import { Data } from '../../../utils'
 
 interface PropsLink {
@@ -22,7 +22,6 @@ const Link: FC<PropsLink> = ({
   activePath && (active = 'active')
   return (
     <a
-      onClick={setActive}
       className={`customLink ${active}`}
       id={active}
       href={anchor ? `#${to}` : to}
@@ -30,11 +29,6 @@ const Link: FC<PropsLink> = ({
       {label}
     </a>
   )
-}
-
-const setActive = (e: BaseSyntheticEvent) => {
-  document.getElementById('active')?.removeAttribute('id')
-  e.target.id = 'active'
 }
 
 export default Link

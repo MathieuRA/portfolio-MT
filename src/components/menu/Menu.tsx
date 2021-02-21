@@ -1,4 +1,5 @@
-import { FC } from 'react'
+import { FC, useContext } from 'react'
+import ScrollContext from '../../context/scrollContext'
 
 import { IMenu } from '../../interfaces'
 import { Link } from '../templates'

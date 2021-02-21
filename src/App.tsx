@@ -1,34 +1,39 @@
 import React, { useEffect } from 'react'
+import { throttle } from 'lodash'
 
 import { Data } from './utils'
 import { Menu, Page } from './components'
+import { useHashHooks, useScrollHooks } from './hooks'
+
+import IScrollContextValue from './interfaces/IScrollContextValue'
+import ScrollContext from './context/scrollContext'
 
 import './app.css'
-import { throttle } from 'lodash'
 
 const data = Data.getInstance()
 const sliderImgs = data.getSliderImgs()
-const menuItem = data.getMenuItems()
 
-let navIterator = 0
+const changeCurrentRoute = (route: string): void => {
+  scrollContextValue.currentActive = route
+}
 
-const customScroll = (e: WheelEvent): void => {
-  const down = e.deltaY > 1
-  if (
-    (down && navIterator === menuItem.length - 1) ||
-    (!down && navIterator === 0)
-  ) {
-    return
-  }
-  e.deltaY > 1 ? (navIterator += 1) : (navIterator -= 1)
-  window.location.hash = menuItem[navIterator]
+const scrollContextValue: IScrollContextValue = {
+  actions: {
+    changeCurrentRoute,
+  },
+  currentActive: '',
 }
 
 function App() {
+  const hash = useHashHooks()
+  const { scrollingRoute, setActive } = useScrollHooks(
+    scrollContextValue
+  )
+
   useEffect(() => {
     window.addEventListener(
       'wheel',
-      throttle(customScroll, 1000, {
+      throttle(scrollingRoute, 1000, {
         leading: true,
         trailing: false,
       })
@@ -36,30 +41,37 @@ function App() {
     return () => {
       window.removeEventListener(
         'wheel',
-        throttle(() => {}, 1000, {
+        throttle(scrollingRoute, 1000, {
           leading: true,
           trailing: false,
         })
       )
     }
   }, [])
+
+  useEffect(() => {
+    setActive(hash)
+  }, [hash])
+
   return (
     <div className='App'>
-      <Menu itemsNavigation={data.getNavigation()} />
-      {data.getMenuItems().map((item, index) => {
-        if (typeof sliderImgs[item] === 'undefined') {
-          throw new Error(
-            `You forget to add slider to your page: ${item}, please verify your menu configuration`
+      <ScrollContext.Provider value={scrollContextValue}>
+        <Menu itemsNavigation={data.getNavigation()} />
+        {data.getMenuItems().map((item, index) => {
+          if (typeof sliderImgs[item] === 'undefined') {
+            throw new Error(
+              `You forget to add slider to your page: ${item}, please verify your menu configuration`
+            )
+          }
+          return (
+            <Page
+              anchor={item}
+              key={index}
+              sliderImg={sliderImgs[item]}
+            />
           )
-        }
-        return (
-          <Page
-            anchor={item}
-            key={index}
-            sliderImg={sliderImgs[item]}
-          />
-        )
-      })}
+        })}
+      </ScrollContext.Provider>
     </div>
   )
 }
