@@ -11,7 +11,11 @@
     }
   },
   "slider": {
-    "corporate": ["CORPORATE1G.svg", "PUB1G.svg"],
+    "corporate": [
+      "CORPORATE1G.svg",
+      "PUB1G.svg",
+      "PUB1G.svg"
+    ],
     "events": ["CORPORATE1G.svg", "PUB1G.svg"],
     "fiction": ["CORPORATE1G.svg", "PUB1G.svg"],
     "post-production": ["CORPORATE1G.svg", "PUB1G.svg"]
