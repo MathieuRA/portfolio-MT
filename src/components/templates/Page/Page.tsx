@@ -15,7 +15,7 @@ interface PropsPage {
 const Page: FC<PropsPage> = ({ anchor, sliderImg }) => {
   return (
     <section id={anchor} style={STYLE}>
-      <Slider anchor={anchor} imgs={sliderImg} />
+      <Slider imgs={sliderImg} />
       <Section section={anchor} />
     </section>
   )

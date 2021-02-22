@@ -9,25 +9,22 @@ const STYLE_EMBED = {
 }
 
 interface PropsSlider {
-  anchor: string
   imgs: string[]
 }
-const Slider: FC<PropsSlider> = ({ anchor, imgs }) => {
-  // Auto have to be dynamic. Maybe create a hook ?
-  // We are reusing a lot if the component are active.
-  // So instead of repeat the code, better to create something to reuse
+const Slider: FC<PropsSlider> = ({ imgs }) => {
   return (
     <div className='slider'>
       <Carousel
-        auto={window.location.hash === `#${anchor}`}
+        auto
         axis={'x'}
-        duration={1000}
+        duration={1500}
         loop
         interval={5000}
       >
         {imgs.map((img, index) => (
-          // FIXME TO IMG WHEN I GOT THE IMG
-          <embed
+          <img
+            alt={'TODO'}
+            className={'imgsSlider'}
             key={index}
             src={`./assets/img/${img}`}
             style={STYLE_EMBED}

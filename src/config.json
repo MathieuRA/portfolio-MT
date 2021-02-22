@@ -12,13 +12,26 @@
   },
   "slider": {
     "corporate": [
-      "CORPORATE1G.svg",
-      "PUB1G.svg",
-      "PUB1G.svg"
+      "CORPORATE_1.png",
+      "CORPORATE_2.png",
+      "CORPORATE_3.png"
     ],
-    "events": ["CORPORATE1G.svg", "PUB1G.svg"],
-    "fiction": ["CORPORATE1G.svg", "PUB1G.svg"],
-    "post-production": ["CORPORATE1G.svg", "PUB1G.svg"]
+    "events": [
+      "EVENTS_1.png",
+      "EVENTS_2.png",
+      "EVENTS_3.png",
+      "EVENTS_4.png"
+    ],
+    "fiction": [
+      "FICTION_1.png",
+      "FICTION_2.png",
+      "FICTION_3.png"
+    ],
+    "post-production": [
+      "CORPORATE_1.png",
+      "CORPORATE_2.png",
+      "CORPORATE_3.png"
+    ]
   },
   "content": {
     "corporate": {

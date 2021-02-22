@@ -1,5 +1,4 @@
-import { FC, useContext } from 'react'
-import ScrollContext from '../../context/scrollContext'
+import { FC } from 'react'
 
 import { IMenu } from '../../interfaces'
 import { Link } from '../templates'
@@ -28,7 +27,11 @@ const Menu: FC<PropsMenu> = ({ itemsNavigation }) => {
         />
       </MenuSection>
       <MenuSection position={'right'} items={rightPart}>
-        <Link label={contact.toUpperCase()} to={contact} />
+        <Link
+          label={contact.toUpperCase()}
+          anchor
+          to={contact}
+        />
       </MenuSection>
     </nav>
   )

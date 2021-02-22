@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import { Data } from '../../../utils'
 
 interface PropsLink {
   anchor?: boolean
@@ -11,19 +10,9 @@ const Link: FC<PropsLink> = ({
   label,
   to,
 }) => {
-  const activePath = window.location.hash === `#${to}`
-  const homePage = window.location.hash === ''
-  // If any hash are set into the URL, we are setting the first item menu as 'active'
-  const isFirstElement =
-    to === Data.getInstance().getMenuItems()[0]
-  let active = ''
-
-  homePage && isFirstElement && (active = 'active')
-  activePath && (active = 'active')
   return (
     <a
-      className={`customLink ${active}`}
-      id={active}
+      className={`customLink`}
       href={anchor ? `#${to}` : to}
     >
       {label}

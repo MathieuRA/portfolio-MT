@@ -30,9 +30,12 @@ const useScrollHook = (context: IScrollContextValue) => {
   }
 
   const setActive = (hash: string) => {
+    document.getElementById('active')?.removeAttribute('id')
     for (let i = 0; i < menuLinks.length; i++) {
       const link = menuLinks[i].href.split('#')[1]
-      if (`#${link}` === hash) {
+      if (hash === '') {
+        menuLinks[0].id = 'active'
+      } else if (`#${link}` === hash) {
         menuLinks[i].id = 'active'
       }
     }

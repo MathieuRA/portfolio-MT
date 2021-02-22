@@ -6,7 +6,6 @@ import { Menu, Page } from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
 
 import IScrollContextValue from './interfaces/IScrollContextValue'
-import ScrollContext from './context/scrollContext'
 
 import './app.css'
 
@@ -55,23 +54,21 @@ function App() {
 
   return (
     <div className='App'>
-      <ScrollContext.Provider value={scrollContextValue}>
-        <Menu itemsNavigation={data.getNavigation()} />
-        {data.getMenuItems().map((item, index) => {
-          if (typeof sliderImgs[item] === 'undefined') {
-            throw new Error(
-              `You forget to add slider to your page: ${item}, please verify your menu configuration`
-            )
-          }
-          return (
-            <Page
-              anchor={item}
-              key={index}
-              sliderImg={sliderImgs[item]}
-            />
+      <Menu itemsNavigation={data.getNavigation()} />
+      {data.getMenuItems().map((item, index) => {
+        if (typeof sliderImgs[item] === 'undefined') {
+          throw new Error(
+            `You forget to add slider to your page: ${item}, please verify your menu configuration`
           )
-        })}
-      </ScrollContext.Provider>
+        }
+        return (
+          <Page
+            anchor={item}
+            key={index}
+            sliderImg={sliderImgs[item]}
+          />
+        )
+      })}
     </div>
   )
 }

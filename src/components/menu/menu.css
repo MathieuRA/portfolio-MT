@@ -13,6 +13,7 @@
 #active:hover::after {
   border-top: 1px solid transparent !important;
   border-right: 1px solid transparent !important;
+  transition: none !important;
 }
 #active:focus::after {
   transition: none !important;
