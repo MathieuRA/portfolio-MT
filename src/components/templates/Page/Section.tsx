@@ -22,7 +22,7 @@ const Section: FC<PropsSection> = ({ section }) => {
     section
   )
 
-  const hash = useHashHooks
+  const hash = useHashHooks()
   // Only mount the active component
   useEffect(() => {
     setActiveSection(
