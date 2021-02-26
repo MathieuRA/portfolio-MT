@@ -1,4 +1,5 @@
-import Carousel from 're-carousel'
+import { Carousel } from '../../../packages/'
+import IndicatorDots from './CarouselDots'
 import { FC } from 'react'
 
 import './page.css'
@@ -20,6 +21,7 @@ const Slider: FC<PropsSlider> = ({ imgs }) => {
         duration={1500}
         loop
         interval={5000}
+        widgets={[IndicatorDots]}
       >
         {imgs.map((img, index) => (
           <img
