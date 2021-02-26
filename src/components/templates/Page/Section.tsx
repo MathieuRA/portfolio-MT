@@ -63,13 +63,10 @@ const Section: FC<PropsSection> = ({ section }) => {
   ])
 
   return (
-    <section
-      className='section'
-      style={{ color: 'white', paddingTop: 100 }}
-    >
+    <section className='section'>
       {
         <Fade show={activeSection && scrollEnded}>
-          <h1>{title}</h1>
+          <h1>{title.toUpperCase()}</h1>
           <p>{text}</p>
         </Fade>
       }

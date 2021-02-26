@@ -1,6 +1,31 @@
 .slider,
 .section {
-  width: 50%;
-  height: 100%;
   background-color: black;
+  height: 100%;
+  width: 50%;
+}
+.section {
+  display: flex;
+}
+
+.section > div {
+  font-family: 'montserrat';
+  height: 50%;
+  margin: auto;
+  width: 90%;
+}
+
+.section h1 {
+  color: var(--main-gold);
+  font-size: 4.1rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.section p {
+  color: var(--main-grey);
+  font-size: 1.2rem;
+  line-height: 2em;
+  margin-left: 10%;
+  text-align: justify;
 }
