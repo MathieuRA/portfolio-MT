@@ -1,5 +1,5 @@
 import { debounce, throttle } from 'lodash'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { Fade } from '..'
 
@@ -17,10 +17,6 @@ const Section: FC<PropsSection> = ({ section }) => {
     Boolean
   )
   const [scrollEnded, setScrollEnded] = useState(true)
-
-  const contents: IContent = Data.getInstance().getContent(
-    section
-  )
 
   const hash = useHashHooks()
   // Only mount the active component
@@ -57,6 +53,15 @@ const Section: FC<PropsSection> = ({ section }) => {
       )
     }
   }, [])
+
+  const contents: IContent = useMemo(
+    () => Data.getInstance().getContent(section),
+    [section]
+  )
+  const { text, title } = useMemo(() => contents, [
+    contents,
+  ])
+
   return (
     <section
       className='section'
@@ -64,8 +69,8 @@ const Section: FC<PropsSection> = ({ section }) => {
     >
       {
         <Fade show={activeSection && scrollEnded}>
-          <h1>{contents.title}</h1>
-          <p>{contents.text}</p>
+          <h1>{title}</h1>
+          <p>{text}</p>
         </Fade>
       }
     </section>
