@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createRef } from 'react'
 import PropTypes from 'prop-types'
 
 const styles = {
@@ -16,14 +16,22 @@ const styles = {
 
 class Carousel extends React.Component {
   constructor(props) {
-    console.log(props)
     super(props)
-
     this.state = {
       frames: [].concat(
         props.frames || props.children || []
       ),
       currentFrameIndex: props.onStartFrameIndex,
+    }
+
+    this.frame = {}
+    for (
+      let index = 0;
+      index < props.children.length;
+      index++
+    ) {
+      const children = props.children[index]
+      this.frame[`f${index}`] = createRef()
     }
 
     this.mounted = false
@@ -36,6 +44,7 @@ class Carousel extends React.Component {
     this.prev = this.prev.bind(this)
     this.next = this.next.bind(this)
     this.setFrame = this.setFrame.bind(this)
+    this.wrapper = createRef()
 
     if (props.loop === false && props.auto) {
       console.warn(
@@ -49,12 +58,17 @@ class Carousel extends React.Component {
     this.prepareAutoSlide()
     this.hideFrames()
 
-    this.refs.wrapper.addEventListener(
+    this.wrapper.current.addEventListener(
       'touchmove',
       this.onTouchMove,
-      { capture: true }
+      {
+        capture: true,
+        // Passive a for prevent scroll when moving.
+        // Recommanded for latest web navigator
+        passive: true,
+      }
     )
-    this.refs.wrapper.addEventListener(
+    this.wrapper.current.addEventListener(
       'touchend',
       this.onTouchEnd,
       { capture: true }
@@ -71,12 +85,12 @@ class Carousel extends React.Component {
     this.clearAutoTimeout()
     clearTimeout(this.debounceTimeoutId)
 
-    this.refs.wrapper.removeEventListener(
+    this.wrapper.current.removeEventListener(
       'touchmove',
       this.onTouchMove,
       { capture: true }
     )
-    this.refs.wrapper.removeEventListener(
+    this.wrapper.current.removeEventListener(
       'touchend',
       this.onTouchEnd,
       { capture: true }
@@ -111,7 +125,7 @@ class Carousel extends React.Component {
 
   hideFrames() {
     for (let i = 1; i < this.state.frames.length; i++) {
-      this.refs['f' + i].style.opacity = 0
+      this.frame['f' + i].current.style.opacity = 0
     }
   }
 
@@ -141,17 +155,17 @@ class Carousel extends React.Component {
       deltaY: 0,
     })
 
-    this.refs.wrapper.addEventListener(
+    this.wrapper.current.addEventListener(
       'mousemove',
       this.onTouchMove,
       { capture: true }
     )
-    this.refs.wrapper.addEventListener(
+    this.wrapper.current.addEventListener(
       'mouseup',
       this.onTouchEnd,
       { capture: true }
     )
-    this.refs.wrapper.addEventListener(
+    this.wrapper.current.addEventListener(
       'mouseleave',
       this.onTouchEnd,
       { capture: true }
@@ -209,17 +223,17 @@ class Carousel extends React.Component {
     direction && this.transitFramesTowards(direction)
 
     // cleanup
-    this.refs.wrapper.removeEventListener(
+    this.wrapper.current.removeEventListener(
       'mousemove',
       this.onTouchMove,
       { capture: true }
     )
-    this.refs.wrapper.removeEventListener(
+    this.wrapper.current.removeEventListener(
       'mouseup',
       this.onTouchEnd,
       { capture: true }
     )
-    this.refs.wrapper.removeEventListener(
+    this.wrapper.current.removeEventListener(
       'mouseleave',
       this.onTouchEnd,
       { capture: true }
@@ -404,9 +418,9 @@ class Carousel extends React.Component {
   }
 
   updateFrameSize(cb) {
-    if (this.refs.wrapper) {
+    if (this.wrapper.current) {
       const { width, height } = window.getComputedStyle(
-        this.refs.wrapper
+        this.wrapper.current
       )
       this.setState(
         {
@@ -420,17 +434,22 @@ class Carousel extends React.Component {
 
   getSiblingFrames() {
     return {
-      currentFrameIndex: this.refs['f' + this.getFrameId()],
-      prev: this.refs['f' + this.getFrameId('prev')],
-      next: this.refs['f' + this.getFrameId('next')],
+      currentFrameIndex: this.frame['f' + this.getFrameId()]
+        .current,
+      prev: this.frame['f' + this.getFrameId('prev')]
+        .current,
+      next: this.frame['f' + this.getFrameId('next')]
+        .current,
     }
   }
 
   getSiblingFramesByOverride(index) {
     return {
-      currentFrameIndex: this.refs['f' + index],
-      prev: this.refs['f' + this.getFrameId('prev', index)],
-      next: this.refs['f' + this.getFrameId('next', index)],
+      currentFrameIndex: this.frame['f' + index].current,
+      prev: this.frame['f' + this.getFrameId('prev', index)]
+        .current,
+      next: this.frame['f' + this.getFrameId('next', index)]
+        .current,
     }
   }
   prepareSiblingFrames(
@@ -571,15 +590,6 @@ class Carousel extends React.Component {
     })
   }
 
-  // debugFrames () {
-  //   console.log('>>> DEBUG-FRAMES: currentFrameIndex', this.state.currentFrameIndex)
-  //   const len = this.state.frames.length
-  //   for (let i = 0; i < len; ++i) {
-  //     const ref = this.refs['f' + i]
-  //     console.info(ref.innerText.trim(), ref.style.transform)
-  //   }
-  // }
-
   render() {
     const { frames, currentFrameIndex } = this.state
     const {
@@ -597,7 +607,7 @@ class Carousel extends React.Component {
     return (
       <div style={wrapperStyle}>
         <div
-          ref='wrapper'
+          ref={this.wrapper}
           style={objectAssign(
             { overflow: 'hidden' },
             wrapperStyle
@@ -615,7 +625,11 @@ class Carousel extends React.Component {
               styles.frame
             )
             return (
-              <div ref={'f' + i} key={i} style={frameStyle}>
+              <div
+                ref={this.frame[`f${i}`]}
+                key={i}
+                style={frameStyle}
+              >
                 {frame}
               </div>
             )
