@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { throttle } from 'lodash'
 
 import { Data } from './utils'
@@ -25,6 +25,8 @@ const scrollContextValue: IScrollContextValue = {
 
 function App() {
   const hash = useHashHooks()
+  const [loaded, setLoaded] = useState(false)
+  const video = useRef(null)
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
   )
@@ -37,6 +39,10 @@ function App() {
         trailing: false,
       })
     )
+    setTimeout(() => {
+      setLoaded(true)
+    }, 3200)
+
     return () => {
       window.removeEventListener(
         'wheel',
@@ -54,21 +60,40 @@ function App() {
 
   return (
     <div className='App'>
-      <Menu itemsNavigation={data.getNavigation()} />
-      {data.getMenuItems().map((item, index) => {
-        if (typeof sliderImgs[item] === 'undefined') {
-          throw new Error(
-            `You forget to add slider to your page: ${item}, please verify your menu configuration`
-          )
-        }
-        return (
-          <Page
-            anchor={item}
-            key={index}
-            sliderImg={sliderImgs[item]}
+      {!loaded && (
+        <video
+          autoPlay
+          muted
+          preload='metadata'
+          ref={video}
+        >
+          <source
+            src='assets/video/Animation_LOGO.mp4'
+            type='video/mp4'
           />
-        )
-      })}
+          Sorry, your browser doesn't support embedded
+          videos.
+        </video>
+      )}
+      {loaded && (
+        <>
+          <Menu itemsNavigation={data.getNavigation()} />
+          {data.getMenuItems().map((item, index) => {
+            if (typeof sliderImgs[item] === 'undefined') {
+              throw new Error(
+                `You forget to add slider to your page: ${item}, please verify your menu configuration`
+              )
+            }
+            return (
+              <Page
+                anchor={item}
+                key={index}
+                sliderImg={sliderImgs[item]}
+              />
+            )
+          })}
+        </>
+      )}
     </div>
   )
 }
