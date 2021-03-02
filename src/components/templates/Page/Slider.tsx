@@ -5,8 +5,10 @@ import { FC } from 'react'
 import './page.css'
 import './slider.css'
 
-const STYLE_EMBED = {
+const STYLE_IMG = {
+  backgroundSize: 'cover',
   height: '100%',
+  width: '100%',
 }
 
 interface PropsSlider {
@@ -24,12 +26,12 @@ const Slider: FC<PropsSlider> = ({ imgs }) => {
         widgets={[IndicatorDots]}
       >
         {imgs.map((img, index) => (
-          <img
-            alt={'TODO'}
-            className={'imgsSlider'}
+          <div
             key={index}
-            src={`./assets/img/${img}`}
-            style={STYLE_EMBED}
+            style={{
+              backgroundImage: `url(./assets/img/${img})`,
+              ...STYLE_IMG,
+            }}
           />
         ))}
       </Carousel>

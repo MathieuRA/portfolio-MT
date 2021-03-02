@@ -38,7 +38,7 @@
   position: fixed;
   width: 100%;
   font-family: 'montserrat';
-  z-index: 9999;
+  z-index: 101;
 }
 #menu ul {
   display: flex;

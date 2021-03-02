@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { throttle } from 'lodash'
 
+import IScrollContextValue from './interfaces/IScrollContextValue'
 import { Data } from './utils'
 import { Menu, Page } from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
-
-import IScrollContextValue from './interfaces/IScrollContextValue'
 
 import './app.css'
 
@@ -25,11 +24,15 @@ const scrollContextValue: IScrollContextValue = {
 
 function App() {
   const hash = useHashHooks()
-  const [loaded, setLoaded] = useState(false)
-  const video = useRef(null)
+  const loader = useRef<HTMLImageElement>(null)
+  const loaderContainer = useRef<HTMLDivElement>(null)
+  const [loaderEnded, setLoaderEndend] = useState(false)
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
   )
+
+  const removeLoader = (e: TransitionEventInit) =>
+    e.propertyName === 'height' && setLoaderEndend(true)
 
   useEffect(() => {
     window.addEventListener(
@@ -39,10 +42,14 @@ function App() {
         trailing: false,
       })
     )
+    // Loader animation management
     setTimeout(() => {
-      setLoaded(true)
-    }, 3200)
-
+      loaderContainer.current &&
+        (loaderContainer.current.style.height = '0')
+      setTimeout(() => {
+        loader.current && (loader.current.style.width = '0')
+      }, 200)
+    }, 2800)
     return () => {
       window.removeEventListener(
         'wheel',
@@ -59,41 +66,57 @@ function App() {
   }, [hash])
 
   return (
-    <div className='App'>
-      {!loaded && (
-        <video
-          autoPlay
-          muted
-          preload='metadata'
-          ref={video}
+    <div
+      className='App'
+      style={{
+        display: 'flex',
+        flexFlow: 'wrap',
+      }}
+    >
+      {!loaderEnded && (
+        <div
+          onTransitionEnd={removeLoader}
+          ref={loaderContainer}
+          style={{
+            backgroundColor: 'white',
+            display: 'flex',
+            height: '100vh',
+            position: 'absolute',
+            transition: '1s',
+            width: '100%',
+            zIndex: 110,
+          }}
         >
-          <source
-            src='assets/video/Animation_LOGO.mp4'
-            type='video/mp4'
+          {!loaderEnded && (
+            <img
+              ref={loader}
+              src='assets/video/animation_LOGO.gif'
+              style={{
+                display: 'flex',
+                margin: 'auto',
+                transition: '0.5s',
+                width: '50%',
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      <Menu itemsNavigation={data.getNavigation()} />
+      {data.getMenuItems().map((item, index) => {
+        if (typeof sliderImgs[item] === 'undefined') {
+          throw new Error(
+            `You forget to add slider to your page: ${item}, please verify your menu configuration`
+          )
+        }
+        return (
+          <Page
+            anchor={item}
+            key={index}
+            sliderImg={sliderImgs[item]}
           />
-          Sorry, your browser doesn't support embedded
-          videos.
-        </video>
-      )}
-      {loaded && (
-        <>
-          <Menu itemsNavigation={data.getNavigation()} />
-          {data.getMenuItems().map((item, index) => {
-            if (typeof sliderImgs[item] === 'undefined') {
-              throw new Error(
-                `You forget to add slider to your page: ${item}, please verify your menu configuration`
-              )
-            }
-            return (
-              <Page
-                anchor={item}
-                key={index}
-                sliderImg={sliderImgs[item]}
-              />
-            )
-          })}
-        </>
-      )}
+        )
+      })}
     </div>
   )
 }
