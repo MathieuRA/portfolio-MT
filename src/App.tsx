@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { throttle } from 'lodash'
 
 import IScrollContextValue from './interfaces/IScrollContextValue'
-import { Data } from './utils'
+import { blockScroll, Data } from './utils'
 import { Menu, Page } from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
 
@@ -31,10 +31,10 @@ function App() {
     scrollContextValue
   )
 
-  const removeLoader = (e: TransitionEventInit) =>
+  const removeLoader = (e: TransitionEventInit) => {
     e.propertyName === 'height' && setLoaderEndend(true)
-
-  useEffect(() => {
+    // Enable scrolling
+    window.removeEventListener('wheel', blockScroll)
     window.addEventListener(
       'wheel',
       throttle(scrollingRoute, 1000, {
@@ -42,6 +42,10 @@ function App() {
         trailing: false,
       })
     )
+  }
+
+  useEffect(() => {
+    window.addEventListener('wheel', blockScroll)
     // Loader animation management
     setTimeout(() => {
       loaderContainer.current &&
