@@ -22,6 +22,7 @@ class Carousel extends React.Component {
         props.frames || props.children || []
       ),
       currentFrameIndex: props.onStartFrameIndex,
+      auto: false,
     }
 
     this.frame = {}
@@ -99,6 +100,15 @@ class Carousel extends React.Component {
   }
 
   componentDidUpdate(_, prevState) {
+    // FORK FOR START THE SLIDER
+    // WHEN COMPONENT ARE MOUNTED
+    if (_.auto !== this.state.auto) {
+      this.setState({
+        auto: _.auto,
+      })
+      this.prepareAutoSlide()
+    }
+
     if (
       this.state.frames.length &&
       this.state.frames.length !== prevState.frames.length
@@ -649,7 +659,7 @@ class Carousel extends React.Component {
                 setFrameHandler={this.setFrame}
                 axis={axis}
                 loop={loop}
-                auto={auto}
+                auto={this.state.auto}
                 interval={interval}
               />
             ))}

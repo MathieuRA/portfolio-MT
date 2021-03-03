@@ -1,6 +1,9 @@
-import { Carousel } from '../../../packages/'
+import { FC, useEffect, useState } from 'react'
+
 import IndicatorDots from './CarouselDots'
-import { FC } from 'react'
+
+import { Carousel } from '../../../packages/'
+import { useHashHooks } from '../../../hooks'
 
 import './page.css'
 import './slider.css'
@@ -12,13 +15,23 @@ const STYLE_IMG = {
 }
 
 interface PropsSlider {
+  anchor: string
   imgs: string[]
 }
-const Slider: FC<PropsSlider> = ({ imgs }) => {
+const Slider: FC<PropsSlider> = ({ anchor, imgs }) => {
+  const [active, setActive] = useState(false)
+  const hash = useHashHooks()
+
+  useEffect(() => {
+    const showedSlider =
+      `#${anchor}` === window.location.hash
+    showedSlider !== active && setActive(showedSlider)
+  }, [hash])
+
   return (
     <div className='slider'>
       <Carousel
-        auto
+        auto={active}
         axis={'x'}
         duration={1500}
         loop

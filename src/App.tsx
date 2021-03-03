@@ -10,6 +10,7 @@ import './app.css'
 
 const data = Data.getInstance()
 const sliderImgs = data.getSliderImgs()
+const menuItems = data.getMenuItems()
 
 const changeCurrentRoute = (route: string): void => {
   scrollContextValue.currentActive = route
@@ -28,6 +29,10 @@ function App() {
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
   )
+
+  useEffect(() => {
+    window.location.hash = menuItems[0]
+  }, [])
 
   useEffect(() => {
     if (!loaderEnded) {
@@ -67,7 +72,7 @@ function App() {
         <Loader setLoaderEndend={setLoaderEndend} />
       )}
       <Menu itemsNavigation={data.getNavigation()} />
-      {data.getMenuItems().map((item, index) => {
+      {menuItems.map((item, index) => {
         if (typeof sliderImgs[item] === 'undefined') {
           throw new Error(
             `You forget to add slider to your page: ${item}, please verify your menu configuration`
