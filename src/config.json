@@ -12,20 +12,20 @@
   },
   "slider": {
     "corporate": [
-      "CORPORATE_1.png",
-      "CORPORATE_2.png",
-      "CORPORATE_3.png"
+      "CORPORATE_1.jpg",
+      "CORPORATE_2.jpg",
+      "CORPORATE_3.jpg"
     ],
     "events": [
-      "EVENTS_1.png",
-      "EVENTS_2.png",
-      "EVENTS_3.png",
-      "EVENTS_4.png"
+      "EVENTS_1.jpg",
+      "EVENTS_2.jpg",
+      "EVENTS_3.jpg",
+      "EVENTS_4.jpg"
     ],
     "fiction": [
-      "FICTION_1.png",
-      "FICTION_2.png",
-      "FICTION_3.png"
+      "FICTION_1.jpg",
+      "FICTION_2.jpg",
+      "FICTION_3.jpg"
     ]
   },
   "content": {
