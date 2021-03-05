@@ -9,14 +9,15 @@
   --main-blue: #4b8a9f;
 }
 html {
-  overflow: hidden;
   scroll-behavior: smooth;
 }
 body {
+  overflow: hidden;
   margin: 0;
 }
 .App {
-  height: 100vh;
+  display: flex;
+  flex-flow: wrap;
 }
 .customLink {
   text-decoration: none;

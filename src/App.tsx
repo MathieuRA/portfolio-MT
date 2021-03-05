@@ -1,16 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { map, throttle } from 'lodash'
+import { useEffect, useState } from 'react'
 
 import IScrollContextValue from './interfaces/IScrollContextValue'
-import { Data } from './utils'
+import {
+  Data,
+  disableSmartScroll,
+  enableSmartScroll,
+} from './utils'
 import { Loader, Menu, Page } from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
 
 import './app.css'
+import { PageWithScroll } from './components/templates'
 
 const data = Data.getInstance()
-const pagesWithSlider = data.getSliderImgs()
 const menuItems = data.getMenuItems()
+const pagesWithSlider = data.getSliderImgs()
+
+const lastPage = menuItems.pop()
 
 const changeCurrentRoute = (route: string): void => {
   scrollContextValue.currentActive = route
@@ -38,21 +44,9 @@ function App() {
     if (!loaderEnded) {
       return
     }
-    window.addEventListener(
-      'wheel',
-      throttle(scrollingRoute, 1000, {
-        leading: true,
-        trailing: false,
-      })
-    )
+    enableSmartScroll(scrollingRoute)
     return () => {
-      window.removeEventListener(
-        'wheel',
-        throttle(scrollingRoute, 1000, {
-          leading: true,
-          trailing: false,
-        })
-      )
+      disableSmartScroll(scrollingRoute)
     }
   }, [loaderEnded])
 
@@ -79,6 +73,7 @@ function App() {
           sliderImg={pagesWithSlider[page]}
         />
       ))}
+      {lastPage && <PageWithScroll anchor={lastPage} />}
     </div>
   )
 }
