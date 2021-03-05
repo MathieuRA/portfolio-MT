@@ -6,11 +6,15 @@ import {
   disableSmartScroll,
   enableSmartScroll,
 } from './utils'
-import { Loader, Menu, Page } from './components'
+import {
+  Loader,
+  Menu,
+  Page,
+  PageWithScroll,
+} from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
 
 import './app.css'
-import { PageWithScroll } from './components/templates'
 
 const data = Data.getInstance()
 const menuItems = data.getMenuItems()
@@ -73,7 +77,14 @@ function App() {
           sliderImg={pagesWithSlider[page]}
         />
       ))}
-      {lastPage && <PageWithScroll anchor={lastPage} />}
+      {lastPage && (
+        <PageWithScroll
+          anchor={lastPage}
+          previousAnchor={
+            menuItems[data.getMenuItemsLenght() - 2]
+          }
+        />
+      )}
     </div>
   )
 }
