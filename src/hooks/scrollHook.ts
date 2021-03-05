@@ -9,8 +9,15 @@ const menuLinks = document.links
  * @param context the scrollContextValue
  */
 const useScrollHook = (context: IScrollContextValue) => {
-  const scrollingRoute = (e: WheelEvent) => {
-    const down = e.deltaY > 1
+  const scrollingRoute = (
+    e: WheelEvent | KeyboardEvent
+  ) => {
+    const evWheel = e instanceof WheelEvent && e
+    const evKeyBoard = e instanceof KeyboardEvent && e
+    const down = evWheel
+      ? evWheel.deltaY > 1
+      : evKeyBoard && evKeyBoard.code === 'ArrowDown'
+
     let index = menuItems.findIndex(
       (item) => `#${item}` === context.currentActive
     )
