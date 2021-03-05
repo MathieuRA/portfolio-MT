@@ -26,11 +26,6 @@
       "FICTION_1.png",
       "FICTION_2.png",
       "FICTION_3.png"
-    ],
-    "post-production": [
-      "CORPORATE_1.png",
-      "CORPORATE_2.png",
-      "CORPORATE_3.png"
     ]
   },
   "content": {
@@ -45,10 +40,6 @@
     "fiction": {
       "title": "FICTION",
       "text": "Un texte et une série ou écrite de mots perçus comme constituant un ensemble cohérent, porteur de sens et utilisant les structures propres à une langue. Un texte n'a pas de longueur déterminée sauf dans le cas de poèmes à forme fixe comme le sonnet ou le haïku"
-    },
-    "post-production": {
-      "title": "POST-PROD",
-      "text": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita sint repellat at doloribus, assumenda reprehenderit quidem, itaque asperiores, magnam culpa ullam! Eaque fuga dolorum cupiditate sed. Laboriosam, doloremque. Atque, debitis!"
     }
   }
 }

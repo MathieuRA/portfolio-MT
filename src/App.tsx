@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { throttle } from 'lodash'
+import { map, throttle } from 'lodash'
 
 import IScrollContextValue from './interfaces/IScrollContextValue'
 import { Data } from './utils'
@@ -9,7 +9,7 @@ import { useHashHooks, useScrollHooks } from './hooks'
 import './app.css'
 
 const data = Data.getInstance()
-const sliderImgs = data.getSliderImgs()
+const pagesWithSlider = data.getSliderImgs()
 const menuItems = data.getMenuItems()
 
 const changeCurrentRoute = (route: string): void => {
@@ -72,20 +72,13 @@ function App() {
         <Loader setLoaderEndend={setLoaderEndend} />
       )}
       <Menu itemsNavigation={data.getNavigation()} />
-      {menuItems.map((item, index) => {
-        if (typeof sliderImgs[item] === 'undefined') {
-          throw new Error(
-            `You forget to add slider to your page: ${item}, please verify your menu configuration`
-          )
-        }
-        return (
-          <Page
-            anchor={item}
-            key={index}
-            sliderImg={sliderImgs[item]}
-          />
-        )
-      })}
+      {Object.keys(pagesWithSlider).map((page, index) => (
+        <Page
+          anchor={page}
+          key={index}
+          sliderImg={pagesWithSlider[page]}
+        />
+      ))}
     </div>
   )
 }
