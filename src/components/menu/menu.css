@@ -130,4 +130,35 @@
     transition: 0.4s;
     width: 100%;
   }
+  #listMenu {
+    background-color: #000000b8;
+    display: none;
+    position: fixed;
+    transition: 0.4s;
+    height: 100vh;
+    width: 100vw;
+    z-index: 101;
+  }
+  #listMenu ul {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-align: center;
+    list-style-type: none;
+    padding: 0;
+    justify-content: space-evenly;
+  }
+  #listMenu li {
+    font-size: 2.5em;
+    border-bottom: 1px solid var(--main-gold);
+    padding: 20px;
+    width: 45%;
+    margin: auto;
+  }
+  #listMenu .itemBurgerMenu {
+    color: var(--main-grey);
+  }
+  #listMenu .itemBurgerMenu#active::before {
+    border: none !important;
+  }
 }
