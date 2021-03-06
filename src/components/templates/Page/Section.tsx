@@ -17,6 +17,7 @@ const Section: FC<PropsSection> = ({ section }) => {
     Boolean
   )
   const [scrollEnded, setScrollEnded] = useState(true)
+  const isMobile = window.innerWidth <= 1024
 
   const hash = useHashHooks()
   // Only mount the active component
@@ -65,7 +66,11 @@ const Section: FC<PropsSection> = ({ section }) => {
   return (
     <section className='section'>
       {
-        <Fade show={activeSection && scrollEnded}>
+        <Fade
+          show={
+            isMobile ? true : activeSection && scrollEnded
+          }
+        >
           <h1>{title.toUpperCase()}</h1>
           <p>{text}</p>
         </Fade>

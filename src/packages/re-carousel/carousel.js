@@ -64,9 +64,10 @@ class Carousel extends React.Component {
       this.onTouchMove,
       {
         capture: true,
-        // Passive a for prevent scroll when moving.
+        // Passive false for can preventDefault
+        // and avoid the double scrolling.
         // Recommanded for latest web navigator
-        passive: true,
+        passive: false,
       }
     )
     this.wrapper.current.addEventListener(
@@ -183,6 +184,7 @@ class Carousel extends React.Component {
   }
 
   onTouchMove(e) {
+    e.preventDefault()
     if (e.touches && e.touches.length > 1) return
     this.clearAutoTimeout()
 
@@ -236,7 +238,7 @@ class Carousel extends React.Component {
     this.wrapper.current.removeEventListener(
       'mousemove',
       this.onTouchMove,
-      { capture: true }
+      { capture: true, passive: false }
     )
     this.wrapper.current.removeEventListener(
       'mouseup',

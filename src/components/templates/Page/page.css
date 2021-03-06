@@ -46,8 +46,6 @@
   .section p {
     font-size: 0.4em;
   }
-}
-@media screen and (max-width: 768px) {
   #menu {
     display: none !important;
   }
