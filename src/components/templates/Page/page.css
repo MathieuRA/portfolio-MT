@@ -46,9 +46,6 @@
   .section p {
     font-size: 0.4em;
   }
-  #menu {
-    display: none !important;
-  }
   .sliderPageContainer {
     flex-direction: column;
   }
