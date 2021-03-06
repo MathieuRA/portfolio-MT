@@ -23,15 +23,39 @@
 
 .section h1 {
   color: var(--main-gold);
-  font-size: 4.1rem;
+  font-size: 3vw;
   font-style: italic;
   font-weight: 400;
 }
 
 .section p {
   color: var(--main-grey);
-  font-size: 1.2rem;
+  font-size: 1.05vw;
   line-height: 2em;
   margin-left: 10%;
   text-align: justify;
+}
+@media screen and (max-width: 1024px) {
+  .section > div {
+    font-size: 34px;
+    height: unset;
+  }
+  .section h1 {
+    font-size: 1em !important;
+  }
+  .section p {
+    font-size: 0.4em;
+  }
+}
+@media screen and (max-width: 768px) {
+  #menu {
+    display: none !important;
+  }
+  .sliderPageContainer {
+    flex-direction: column;
+  }
+  .slider,
+  .section {
+    width: 100%;
+  }
 }
