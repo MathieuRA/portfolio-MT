@@ -16,6 +16,7 @@ import {
 import { useHashHooks, useScrollHooks } from './hooks'
 
 import './app.css'
+import { debounce, throttle } from 'lodash'
 
 const data = Data.getInstance()
 const menuItems = data.getMenuItems()
@@ -51,18 +52,37 @@ function App() {
         sections
       )
 
-      document.addEventListener('scroll', () =>
-        detectHashOnScroll(sections, positionSections)
+      document.addEventListener(
+        'scroll',
+        throttle(
+          () =>
+            detectHashOnScroll(sections, positionSections),
+          750,
+          {
+            leading: false,
+            trailing: true,
+          }
+        )
       )
       return () => {
-        document.removeEventListener('scroll', () =>
-          detectHashOnScroll(sections, positionSections)
+        document.removeEventListener(
+          'scroll',
+          throttle(
+            () =>
+              detectHashOnScroll(
+                sections,
+                positionSections
+              ),
+            750,
+            {
+              leading: false,
+              trailing: true,
+            }
+          )
         )
       }
     }
   }, [])
-
-  useEffect(() => {})
 
   useEffect(() => {
     if (!loaderEnded) {
@@ -106,6 +126,7 @@ function App() {
       {lastPage && (
         <PageWithScroll
           anchor={lastPage}
+          isMobile={isMobile}
           previousAnchor={
             menuItems[data.getMenuItemsLenght() - 2]
           }
@@ -133,7 +154,6 @@ const getPositionOfEachSections = (
       sectionPosition.push(nextValue)
     }
   }
-  localStorage.setItem('sectionHeightLoaded', 'true')
   return sectionPosition
 }
 export default App

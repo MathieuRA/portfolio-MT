@@ -4,10 +4,12 @@ import { useHashHooks } from '../../../hooks'
 
 interface PropsPageWithScroll {
   anchor: string
+  isMobile: Boolean
   previousAnchor: string
 }
 const PageWithScroll: FC<PropsPageWithScroll> = ({
   anchor,
+  isMobile,
   previousAnchor,
 }) => {
   const hash = useHashHooks()
@@ -32,8 +34,14 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
       style={{
         backgroundColor: 'black',
         color: 'white',
-        height: `calc(100vh - ${menuHeight}px)`,
-        overflow: isActive ? 'overlay' : 'hidden',
+        height: isMobile
+          ? '100%'
+          : `calc(100vh - ${menuHeight}px)`,
+        overflow: isMobile
+          ? 'visible'
+          : isActive
+          ? 'overlay'
+          : 'hidden',
         width: '100%',
         fontSize: '3rem',
         paddingTop: `calc(${menuHeight}px + ${menuHeight}px)`,
@@ -48,6 +56,8 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
           style={{
             width: '80%',
             margin: '20px auto',
+            fontSize: '0.4em',
+            color: 'var(--main-grey)',
           }}
         >
           Lorem ipsum dolor, sit amet consectetur
@@ -61,6 +71,8 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
           style={{
             width: '80%',
             margin: '20px auto',
+            fontSize: '0.4em',
+            color: 'var(--main-grey)',
           }}
         >
           Lorem ipsum dolor, sit amet consectetur
@@ -74,71 +86,8 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
           style={{
             width: '80%',
             margin: '20px auto',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
+            fontSize: '0.4em',
+            color: 'var(--main-grey)',
           }}
         >
           Lorem ipsum dolor, sit amet consectetur
