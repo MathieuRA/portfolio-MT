@@ -162,4 +162,7 @@
   #listMenu .itemBurgerMenu#active::before {
     border: none !important;
   }
+  #listMenu .itemBurgerMenu#active {
+    color: var(--main-gold);
+  }
 }
