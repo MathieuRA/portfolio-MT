@@ -64,7 +64,7 @@ const Section: FC<PropsSection> = ({ section }) => {
   ])
 
   return (
-    <section className='section'>
+    <div className='section'>
       {
         <Fade
           show={
@@ -75,7 +75,7 @@ const Section: FC<PropsSection> = ({ section }) => {
           <p>{text}</p>
         </Fade>
       }
-    </section>
+    </div>
   )
 }
 export default Section

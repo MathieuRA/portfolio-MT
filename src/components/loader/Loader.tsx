@@ -3,8 +3,12 @@ import { blockScroll } from '../../utils'
 
 interface PropsLoader {
   setLoaderEndend: Function
+  isMobile: Boolean
 }
-const Loader: FC<PropsLoader> = ({ setLoaderEndend }) => {
+const Loader: FC<PropsLoader> = ({
+  setLoaderEndend,
+  isMobile,
+}) => {
   const loader = useRef<HTMLImageElement>(null)
   const loaderContainer = useRef<HTMLDivElement>(null)
 
@@ -53,7 +57,7 @@ const Loader: FC<PropsLoader> = ({ setLoaderEndend }) => {
           display: 'flex',
           margin: 'auto',
           transition: '0.5s',
-          width: '50%',
+          width: `${isMobile ? 100 : 50}%`,
         }}
       />
     </div>

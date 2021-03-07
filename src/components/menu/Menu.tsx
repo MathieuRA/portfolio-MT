@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 
 import { Link } from '../templates'
 
+import { disableScrollOnMenu } from '../../utils'
 import { IMenu } from '../../interfaces'
 
 import './menu.css'
@@ -33,10 +34,13 @@ const BURGERMENUCONFIG = {
 
 interface PropsMenu {
   itemsNavigation: IMenu
+  isMobile: Boolean
 }
-const Menu: FC<PropsMenu> = ({ itemsNavigation }) => {
+const Menu: FC<PropsMenu> = ({
+  itemsNavigation,
+  isMobile,
+}) => {
   const listCollapsedMenu = useRef<HTMLDivElement>(null)
-  const isMobile = window.innerWidth <= 1024
   const {
     contact,
     leftPart,
@@ -88,8 +92,9 @@ const Menu: FC<PropsMenu> = ({ itemsNavigation }) => {
               items={rightPart}
             >
               <Link
-                label={contact.toUpperCase()}
                 anchor
+                HTMLClass='lastMenuItem'
+                label={contact.toUpperCase()}
                 to={contact}
               />
             </MenuSection>
@@ -158,10 +163,17 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   useEffect(() => {
-    portal?.addEventListener('touchmove', (e) => {
-      e.preventDefault()
-    })
-  }, [])
+    portal?.addEventListener(
+      'touchmove',
+      disableScrollOnMenu
+    )
+    return () => {
+      portal?.removeEventListener(
+        'touchmove',
+        disableScrollOnMenu
+      )
+    }
+  }, [portal])
 
   const {
     contact,
@@ -214,8 +226,13 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
               return (
                 <li key={index}>
                   <Link
+                    actionOnClick={toggleMenu}
                     anchor
-                    HTMLClass='itemBurgerMenu'
+                    HTMLClass={`itemBurgerMenu ${
+                      fullMenuItems.length - 1 === index
+                        ? 'lastMenuItem'
+                        : ''
+                    }`}
                     label={item.toLocaleUpperCase()}
                     to={item}
                   />

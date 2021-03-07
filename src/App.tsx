@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import IScrollContextValue from './interfaces/IScrollContextValue'
 import {
   Data,
+  detectHashOnScroll,
   disableSmartScroll,
   enableSmartScroll,
 } from './utils'
@@ -39,10 +40,29 @@ function App() {
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
   )
+  const isMobile = window.innerWidth <= 1024
 
   useEffect(() => {
     window.location.hash = menuItems[0]
+
+    if (isMobile) {
+      const sections = document.querySelectorAll('section')
+      const positionSections = getPositionOfEachSections(
+        sections
+      )
+
+      document.addEventListener('scroll', () =>
+        detectHashOnScroll(sections, positionSections)
+      )
+      return () => {
+        document.removeEventListener('scroll', () =>
+          detectHashOnScroll(sections, positionSections)
+        )
+      }
+    }
   }, [])
+
+  useEffect(() => {})
 
   useEffect(() => {
     if (!loaderEnded) {
@@ -67,9 +87,15 @@ function App() {
       }}
     >
       {!loaderEnded && (
-        <Loader setLoaderEndend={setLoaderEndend} />
+        <Loader
+          setLoaderEndend={setLoaderEndend}
+          isMobile={isMobile}
+        />
       )}
-      <Menu itemsNavigation={data.getNavigation()} />
+      <Menu
+        itemsNavigation={data.getNavigation()}
+        isMobile={isMobile}
+      />
       {Object.keys(pagesWithSlider).map((page, index) => (
         <Page
           anchor={page}
@@ -89,4 +115,25 @@ function App() {
   )
 }
 
+const getPositionOfEachSections = (
+  sections: NodeListOf<HTMLElement>
+): number[][] => {
+  let sectionPosition: number[][] = []
+  for (let index = 0; index < sections.length; index++) {
+    const element = sections[index]
+    if (typeof sectionPosition[0] === 'undefined') {
+      sectionPosition = [[0, element.clientHeight]]
+    } else {
+      const previousValue =
+        sectionPosition[sectionPosition.length - 1]
+      const nextValue = [
+        previousValue[1],
+        previousValue[1] + element.clientHeight,
+      ]
+      sectionPosition.push(nextValue)
+    }
+  }
+  localStorage.setItem('sectionHeightLoaded', 'true')
+  return sectionPosition
+}
 export default App

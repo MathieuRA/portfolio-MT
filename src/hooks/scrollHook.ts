@@ -11,7 +11,7 @@ const menuLinks = document.links
 const useScrollHook = (context: IScrollContextValue) => {
   const scrollingRoute = (
     e: WheelEvent | KeyboardEvent
-  ) => {
+  ): void => {
     const evWheel = e instanceof WheelEvent && e
     const evKeyBoard = e instanceof KeyboardEvent && e
     const down = evWheel

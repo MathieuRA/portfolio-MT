@@ -32,6 +32,11 @@
   border-top: 1px solid var(--main-gold) !important;
 }
 
+.lastMenuItem {
+  color: var(--main-blue) !important;
+  margin: auto 0;
+}
+
 #menu {
   display: flex;
   justify-content: space-between;
@@ -109,10 +114,6 @@
   position: relative;
 }
 
-#menu .divisedMenu > a {
-  color: var(--main-blue) !important;
-  margin: auto 0;
-}
 @media screen and (max-width: 1024px) {
   #burgerMenu {
     cursor: pointer;
@@ -123,7 +124,6 @@
     width: 40px;
   }
   #burgerMenu div {
-    /* background-color: var(--main-grey); */
     border-radius: 3px;
     height: 4px;
     position: relative;
@@ -142,14 +142,15 @@
   #listMenu ul {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    font-size: 2vmin;
+    height: 90%;
     text-align: center;
     list-style-type: none;
     padding: 0;
     justify-content: space-evenly;
   }
   #listMenu li {
-    font-size: 2.5em;
+    font-size: 2em;
     border-bottom: 1px solid var(--main-gold);
     padding: 20px;
     width: 45%;

@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import './fade.css'
 
 interface FadeProps {
-  show: any
+  show: Boolean
   children: any
 }
 const Fade: FC<FadeProps> = ({ show, children }) => {
