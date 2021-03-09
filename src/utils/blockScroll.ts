@@ -1,3 +1,4 @@
-const blockScroll = (e: MouseEvent) => e.preventDefault()
+const blockScroll = (e: MouseEvent | TouchEvent) =>
+  e.preventDefault()
 
 export default blockScroll

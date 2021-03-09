@@ -81,11 +81,13 @@ const Menu: FC<PropsMenu> = ({
         ) : (
           <>
             <MenuSection position={'left'} items={leftPart}>
-              <img
-                alt={alt}
-                src={src}
-                style={{ width: 110, height: 'auto' }}
-              />
+              <a href='#'>
+                <img
+                  alt={alt}
+                  src={src}
+                  style={{ width: 110, height: 'auto' }}
+                />
+              </a>
             </MenuSection>
             <MenuSection
               position={'right'}
@@ -186,6 +188,8 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 
   const fullMenuItems = [...leftPart, ...rightPart, contact]
 
+  // Use context for create globalStore with one property ScrollFromLink: Boolean
+
   const toggleMenu = () => {
     toggleMenuList(portal)
     if (portal) {
@@ -200,13 +204,15 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 
   return (
     <>
-      <img
-        alt={alt}
-        src={src}
-        style={{
-          width: 110,
-        }}
-      />
+      <a href='#'>
+        <img
+          alt={alt}
+          src={src}
+          style={{
+            width: 110,
+          }}
+        />
+      </a>
       <div id='burgerMenu' onClick={toggleMenu}>
         {bars.map((cssProperty, index) => (
           <div

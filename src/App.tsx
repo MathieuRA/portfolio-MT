@@ -16,7 +16,7 @@ import {
 import { useHashHooks, useScrollHooks } from './hooks'
 
 import './app.css'
-import { debounce, throttle } from 'lodash'
+import { throttle } from 'lodash'
 
 const data = Data.getInstance()
 const menuItems = data.getMenuItems()
@@ -56,6 +56,8 @@ function App() {
         'scroll',
         throttle(
           () =>
+            // set a third parameteres ScrollFromLink from StoreContext
+            // Is scrollFromLink: True, so ignore, else detechHasOnSrcoll
             detectHashOnScroll(sections, positionSections),
           750,
           {
@@ -95,6 +97,8 @@ function App() {
   }, [loaderEnded])
 
   useEffect(() => {
+    hash === '' && (window.location.hash = menuItems[0])
+
     setActive(hash)
   }, [hash])
 

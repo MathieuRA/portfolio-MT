@@ -36,7 +36,6 @@
   color: var(--main-blue) !important;
   margin: auto 0;
 }
-
 #menu {
   display: flex;
   justify-content: space-between;
@@ -131,7 +130,7 @@
     width: 100%;
   }
   #listMenu {
-    background-color: #000000b8;
+    background-color: #000000d9;
     display: none;
     position: fixed;
     transition: 0.4s;
@@ -151,7 +150,6 @@
   }
   #listMenu li {
     font-size: 2em;
-    border-bottom: 1px solid var(--main-gold);
     padding: 20px;
     width: 45%;
     margin: auto;
@@ -164,5 +162,6 @@
   }
   #listMenu .itemBurgerMenu#active {
     color: var(--main-gold);
+    border-bottom: 1px solid var(--main-gold);
   }
 }

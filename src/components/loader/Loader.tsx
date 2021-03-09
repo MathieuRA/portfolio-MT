@@ -19,6 +19,9 @@ const Loader: FC<PropsLoader> = ({
       // due to target being treated as passive
       passive: false,
     })
+    window.addEventListener('touchmove', blockScroll, {
+      passive: false,
+    })
     // Loader animation management
     setTimeout(() => {
       const { current } = loaderContainer
@@ -31,6 +34,7 @@ const Loader: FC<PropsLoader> = ({
 
     return () => {
       window.removeEventListener('wheel', blockScroll)
+      window.removeEventListener('touchmove', blockScroll)
     }
   }, [])
   const removeLoader = (e: TransitionEventInit) =>
