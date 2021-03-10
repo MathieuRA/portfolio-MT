@@ -16,8 +16,15 @@ const Link: FC<PropsLink> = ({
   to,
 }) => {
   const action = {
-    onClick: (): void =>
-      actionOnClick ? actionOnClick() : noop(),
+    onClick: (): void => {
+      if (actionOnClick) {
+        // when animation end
+        actionOnClick()
+      }
+
+      anchor && (window.location.hash = to)
+      //actionOnClick ? actionOnClick() : noop()
+    },
   }
   return (
     <a

@@ -126,14 +126,14 @@
     border-radius: 3px;
     height: 4px;
     position: relative;
-    transition: 0.4s;
+    transition: 0.7s;
     width: 100%;
   }
   #listMenu {
     background-color: #000000d9;
     display: none;
     position: fixed;
-    transition: 0.4s;
+    transition: 0.7s;
     height: 100vh;
     width: 100vw;
     z-index: 101;

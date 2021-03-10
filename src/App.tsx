@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
-import IScrollContextValue from './interfaces/IScrollContextValue'
 import {
   Data,
   detectHashOnScroll,
@@ -15,8 +14,12 @@ import {
 } from './components'
 import { useHashHooks, useScrollHooks } from './hooks'
 
+import {
+  IScrollContextValue,
+  IStoreContextValue,
+} from './interfaces'
+
 import './app.css'
-import { throttle } from 'lodash'
 
 const data = Data.getInstance()
 const menuItems = data.getMenuItems()
@@ -35,56 +38,75 @@ const scrollContextValue: IScrollContextValue = {
   currentActive: '',
 }
 
+const toggleMenuIsOpen = () => {
+  storeContextValue.menuIsOpen = !storeContextValue.menuIsOpen
+}
+
+const toggleIsMobile = () => {
+  storeContextValue.isMobile = !storeContextValue.isMobile
+}
+
+const storeContextValue: IStoreContextValue = {
+  menuIsOpen: false,
+  isMobile: false,
+  actions: {
+    toggleIsMobile,
+    toggleMenuIsOpen,
+  },
+}
+
 function App() {
   const hash = useHashHooks()
   const [loaderEnded, setLoaderEndend] = useState(false)
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
   )
+
+  const [menuIsOpen, toggleMenuState] = useState(false)
+
   const isMobile = window.innerWidth <= 1024
+
+  const toggleMenu = () => {
+    toggleMenuState(!menuIsOpen)
+  }
 
   useEffect(() => {
     window.location.hash = menuItems[0]
+  }, [])
+
+  useEffect(() => {
+    // Disable the detection hash if menu are open.
+    // Work but ugly
+    // Need to fix
+    const sections = document.querySelectorAll('section')
+    const positionSections = getPositionOfEachSections(
+      sections
+    )
+    const scrollManagementMenu = () => {
+      detectHashOnScroll(sections, positionSections)
+    }
 
     if (isMobile) {
-      const sections = document.querySelectorAll('section')
-      const positionSections = getPositionOfEachSections(
-        sections
-      )
-
+      if (menuIsOpen) {
+        document.removeEventListener(
+          'scroll',
+          scrollManagementMenu
+        )
+        return
+      }
       document.addEventListener(
         'scroll',
-        throttle(
-          () =>
-            // set a third parameteres ScrollFromLink from StoreContext
-            // Is scrollFromLink: True, so ignore, else detechHasOnSrcoll
-            detectHashOnScroll(sections, positionSections),
-          750,
-          {
-            leading: false,
-            trailing: true,
-          }
-        )
+        scrollManagementMenu
       )
+
       return () => {
         document.removeEventListener(
           'scroll',
-          throttle(
-            () =>
-              detectHashOnScroll(
-                sections,
-                positionSections
-              ),
-            750,
-            {
-              leading: false,
-              trailing: true,
-            }
-          )
+          scrollManagementMenu
         )
       }
     }
-  }, [])
+  }, [menuIsOpen])
 
   useEffect(() => {
     if (!loaderEnded) {
@@ -119,6 +141,8 @@ function App() {
       <Menu
         itemsNavigation={data.getNavigation()}
         isMobile={isMobile}
+        toggleMenu={toggleMenu}
+        menuIsOpen={menuIsOpen}
       />
       {Object.keys(pagesWithSlider).map((page, index) => (
         <Page
@@ -140,9 +164,9 @@ function App() {
   )
 }
 
-const getPositionOfEachSections = (
+function getPositionOfEachSections(
   sections: NodeListOf<HTMLElement>
-): number[][] => {
+): number[][] {
   let sectionPosition: number[][] = []
   for (let index = 0; index < sections.length; index++) {
     const element = sections[index]

@@ -19,15 +19,15 @@ const BURGERMENUCONFIG = {
   },
   bars: [
     {
-      transform: 'rotate(400deg)',
+      transform: 'rotate(680deg)',
       top: '13px',
     },
     {
-      transform: 'rotate(320deg)',
+      transform: 'rotate(580deg)',
     },
     {
       opacity: '0',
-      transform: 'rotate(360deg)',
+      transform: 'rotate(500deg)',
     },
   ],
 }
@@ -35,12 +35,17 @@ const BURGERMENUCONFIG = {
 interface PropsMenu {
   itemsNavigation: IMenu
   isMobile: Boolean
+  toggleMenu: Function
+  menuIsOpen: Boolean
 }
 const Menu: FC<PropsMenu> = ({
   itemsNavigation,
   isMobile,
+  toggleMenu,
+  menuIsOpen,
 }) => {
   const listCollapsedMenu = useRef<HTMLDivElement>(null)
+
   const {
     contact,
     leftPart,
@@ -49,14 +54,19 @@ const Menu: FC<PropsMenu> = ({
   } = itemsNavigation
   const { alt, src } = logo
 
+  console.log(menuIsOpen)
+
   const toggleMenuList = (e: HTMLDivElement | any) => {
+    // Mean start of the animation
     if (e instanceof HTMLDivElement) {
       e.style.opacity === '0' && (e.style.display = 'block')
       return
     }
+    // When animation ended
     e.target.style.opacity === '0'
       ? (e.target.style.display = 'none')
       : (e.target.style.display = 'block')
+    toggleMenu()
   }
 
   return (
