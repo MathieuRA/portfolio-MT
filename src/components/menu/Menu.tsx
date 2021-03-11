@@ -7,6 +7,7 @@ import { disableScrollOnMenu } from '../../utils'
 import { IMenu } from '../../interfaces'
 
 import './menu.css'
+import { useHashHooks, useScrollHooks } from '../../hooks'
 
 const BURGERMENUCONFIG = {
   close: {
@@ -37,12 +38,13 @@ interface PropsMenu {
   isMobile: Boolean
   toggleMenu: Function
   menuIsOpen: Boolean
+  setActive: Function
 }
 const Menu: FC<PropsMenu> = ({
   itemsNavigation,
   isMobile,
   toggleMenu,
-  menuIsOpen,
+  setActive,
 }) => {
   const listCollapsedMenu = useRef<HTMLDivElement>(null)
 
@@ -53,8 +55,6 @@ const Menu: FC<PropsMenu> = ({
     rightPart,
   } = itemsNavigation
   const { alt, src } = logo
-
-  console.log(menuIsOpen)
 
   const toggleMenuList = (e: HTMLDivElement | any) => {
     // Mean start of the animation
@@ -87,6 +87,7 @@ const Menu: FC<PropsMenu> = ({
             itemsNavigation={itemsNavigation}
             portal={listCollapsedMenu.current}
             toggleMenuList={toggleMenuList}
+            setActive={setActive}
           />
         ) : (
           <>
@@ -167,11 +168,13 @@ interface PropsCollpaseMenu {
   itemsNavigation: IMenu
   portal: HTMLDivElement | null
   toggleMenuList: Function
+  setActive: Function
 }
 const CollapseMenu: FC<PropsCollpaseMenu> = ({
   itemsNavigation,
   portal,
   toggleMenuList,
+  setActive,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false)
   useEffect(() => {
@@ -237,29 +240,52 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
       </div>
       {portal !== null &&
         createPortal(
-          <ul>
-            {fullMenuItems.map((item, index) => {
-              return (
-                <li key={index}>
-                  <Link
-                    actionOnClick={toggleMenu}
-                    anchor
-                    HTMLClass={`itemBurgerMenu ${
-                      fullMenuItems.length - 1 === index
-                        ? 'lastMenuItem'
-                        : ''
-                    }`}
-                    label={item.toLocaleUpperCase()}
-                    to={item}
-                  />
-                </li>
-              )
-            })}
-          </ul>,
+          <Portal
+            fullMenuItems={fullMenuItems}
+            toggleMenu={toggleMenu}
+            setActive={setActive}
+          />,
           portal
         )}
     </>
   )
 }
 
+interface PropsPortal {
+  fullMenuItems: string[]
+  toggleMenu: Function
+  setActive: Function
+}
+
+const Portal: FC<PropsPortal> = ({
+  fullMenuItems,
+  toggleMenu,
+  setActive,
+}) => {
+  const hash = useHashHooks()
+  useEffect(() => {
+    setActive(hash)
+  }, [])
+  return (
+    <ul>
+      {fullMenuItems.map((item, index) => {
+        return (
+          <li key={index}>
+            <Link
+              actionOnClick={toggleMenu}
+              anchor
+              HTMLClass={`itemBurgerMenu ${
+                fullMenuItems.length - 1 === index
+                  ? 'lastMenuItem'
+                  : ''
+              }`}
+              label={item.toLocaleUpperCase()}
+              to={item}
+            />
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
 export default Menu

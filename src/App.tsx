@@ -143,6 +143,7 @@ function App() {
         isMobile={isMobile}
         toggleMenu={toggleMenu}
         menuIsOpen={menuIsOpen}
+        setActive={setActive}
       />
       {Object.keys(pagesWithSlider).map((page, index) => (
         <Page

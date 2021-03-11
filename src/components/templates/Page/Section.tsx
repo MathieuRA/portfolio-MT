@@ -72,7 +72,7 @@ const Section: FC<PropsSection> = ({ section }) => {
           }
         >
           <h1>{title.toUpperCase()}</h1>
-          <p>{text}</p>
+          <p dangerouslySetInnerHTML={{ __html: text }} />
         </Fade>
       }
     </div>
