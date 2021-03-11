@@ -3,14 +3,29 @@ import { blockScroll } from '../../utils'
 
 interface PropsLoader {
   setLoaderEndend: Function
+  setLoaderStarted: Function
   isMobile: Boolean
 }
 const Loader: FC<PropsLoader> = ({
   setLoaderEndend,
+  setLoaderStarted,
   isMobile,
 }) => {
-  const loader = useRef<HTMLImageElement>(null)
   const loaderContainer = useRef<HTMLDivElement>(null)
+  const videoloader = useRef<HTMLVideoElement>(null)
+
+  const loaderManager = () => {
+    setLoaderStarted(true)
+    const { current } = videoloader!
+    current!.style.display = 'block'
+    current!.play()
+    current?.addEventListener('ended', function () {
+      loaderContainer.current!.style.height = '0'
+      setTimeout(() => {
+        this.style.width = '0'
+      }, 200)
+    })
+  }
 
   useEffect(() => {
     window.addEventListener('wheel', blockScroll, {
@@ -22,19 +37,11 @@ const Loader: FC<PropsLoader> = ({
     window.addEventListener('touchmove', blockScroll, {
       passive: false,
     })
-    // Loader animation management
-    setTimeout(() => {
-      const { current } = loaderContainer
-      current && (current.style.height = '0')
-      setTimeout(() => {
-        const { current } = loader
-        current && (current.style.width = '0')
-      }, 200)
-    }, 2800)
-
+    window.addEventListener('load', loaderManager)
     return () => {
       window.removeEventListener('wheel', blockScroll)
       window.removeEventListener('touchmove', blockScroll)
+      window.removeEventListener('load', loaderManager)
     }
   }, [])
   const removeLoader = (e: TransitionEventInit) =>
@@ -54,16 +61,23 @@ const Loader: FC<PropsLoader> = ({
         zIndex: 110,
       }}
     >
-      <img
-        ref={loader}
-        src='assets/video/animation_LOGO.gif'
+      <video
+        ref={videoloader}
+        id='video'
+        preload='auto'
+        muted
         style={{
-          display: 'flex',
+          display: 'none',
           margin: 'auto',
           transition: '0.5s',
           width: `${isMobile ? 100 : 50}%`,
         }}
-      />
+      >
+        <source
+          src='assets/video/animation_LOGO.mp4'
+          type='video/mp4'
+        />
+      </video>
     </div>
   )
 }

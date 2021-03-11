@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import {
   Data,
@@ -57,6 +57,7 @@ const storeContextValue: IStoreContextValue = {
 
 function App() {
   const hash = useHashHooks()
+  const [loaderStarted, setLoaderStarted] = useState(false)
   const [loaderEnded, setLoaderEndend] = useState(false)
   const { scrollingRoute, setActive } = useScrollHooks(
     scrollContextValue
@@ -76,17 +77,15 @@ function App() {
 
   useEffect(() => {
     // Disable the detection hash if menu are open.
-    // Work but ugly
-    // Need to fix
     const sections = document.querySelectorAll('section')
     const positionSections = getPositionOfEachSections(
       sections
     )
+
     const scrollManagementMenu = () => {
       detectHashOnScroll(sections, positionSections)
     }
-
-    if (isMobile) {
+    if (isMobile && sections.length !== 0) {
       if (menuIsOpen) {
         document.removeEventListener(
           'scroll',
@@ -106,7 +105,7 @@ function App() {
         )
       }
     }
-  }, [menuIsOpen])
+  }, [menuIsOpen, loaderEnded])
 
   useEffect(() => {
     if (!loaderEnded) {
@@ -135,31 +134,38 @@ function App() {
       {!loaderEnded && (
         <Loader
           setLoaderEndend={setLoaderEndend}
+          setLoaderStarted={setLoaderStarted}
           isMobile={isMobile}
         />
       )}
-      <Menu
-        itemsNavigation={data.getNavigation()}
-        isMobile={isMobile}
-        toggleMenu={toggleMenu}
-        menuIsOpen={menuIsOpen}
-        setActive={setActive}
-      />
-      {Object.keys(pagesWithSlider).map((page, index) => (
-        <Page
-          anchor={page}
-          key={index}
-          sliderImg={pagesWithSlider[page]}
-        />
-      ))}
-      {lastPage && (
-        <PageWithScroll
-          anchor={lastPage}
-          isMobile={isMobile}
-          previousAnchor={
-            menuItems[data.getMenuItemsLenght() - 2]
-          }
-        />
+      {loaderStarted && (
+        <>
+          <Menu
+            itemsNavigation={data.getNavigation()}
+            isMobile={isMobile}
+            toggleMenu={toggleMenu}
+            menuIsOpen={menuIsOpen}
+            setActive={setActive}
+          />
+          {Object.keys(pagesWithSlider).map(
+            (page, index) => (
+              <Page
+                anchor={page}
+                key={index}
+                sliderImg={pagesWithSlider[page]}
+              />
+            )
+          )}
+          {lastPage && (
+            <PageWithScroll
+              anchor={lastPage}
+              isMobile={isMobile}
+              previousAnchor={
+                menuItems[data.getMenuItemsLenght() - 2]
+              }
+            />
+          )}
+        </>
       )}
     </div>
   )
