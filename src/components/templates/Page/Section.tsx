@@ -71,8 +71,15 @@ const Section: FC<PropsSection> = ({ section }) => {
             isMobile ? true : activeSection && scrollEnded
           }
         >
-          <h1>{title.toUpperCase()}</h1>
-          <p dangerouslySetInnerHTML={{ __html: text }} />
+          <h1
+            dangerouslySetInnerHTML={{
+              __html: title.toUpperCase(),
+            }}
+          />
+          <p
+            dangerouslySetInnerHTML={{ __html: text }}
+            style={{ float: 'left' }}
+          />
         </Fade>
       }
     </div>

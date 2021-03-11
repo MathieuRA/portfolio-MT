@@ -54,3 +54,11 @@
     width: 100%;
   }
 }
+@media screen and (max-width: 480px) {
+  .section > div {
+    font-size: 6.5vw;
+  }
+  .section p {
+    font-size: 0.5em;
+  }
+}

@@ -30,12 +30,12 @@
   },
   "content": {
     "corporate": {
-      "title": "film institutionnel publicite - tutoriels",
-      "text": "Je suis à votre écoute afin d’identifier et analyser vos<br>besoins pour réaliser l’outil de communication qui<br>augmentera votre visibilité et aura  un réel impact sur<br> vos clients et vos collaborateurs."
+      "title": "<span>film institutionnel</span><br/><span style='float:right;'>publicite - tutoriels</span>",
+      "text": "Je suis à votre écoute afin d’identifier et analyser vos besoins pour réaliser l’outil de communication qui augmentera votre visibilité et aura  un réel impact sur vos clients et vos collaborateurs."
     },
     "events": {
-      "title": "film evenementiel reportage",
-      "text": "Evenements culturels, familiaux, sportifs...<br>Je suis à votre écoute pour réaliser un film à l’image de<br>votre ressenti et de votre sensibilité afin de prolonger<br>et rendre inoubliable ces moments excpetionnels."
+      "title": "<span>film evenementiel</span><span style='float:right;' >reportage</span>",
+      "text": "Evenements culturels, familiaux, sportifs...<br>Je suis à votre écoute pour réaliser un film à l’image de votre ressenti et de votre sensibilité afin de prolonger et rendre inoubliable ces moments excpetionnels."
     },
     "fiction": {
       "title": "FICTION",
