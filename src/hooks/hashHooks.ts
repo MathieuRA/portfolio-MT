@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const useReactHash = () => {
+const useHashHooks = () => {
   const [hash, setHash] = useState(window.location.hash)
   const listenToHash = () => {
     const winHash = window.location.hash
@@ -15,4 +15,4 @@ const useReactHash = () => {
   return hash
 }
 
-export default useReactHash
+export default useHashHooks

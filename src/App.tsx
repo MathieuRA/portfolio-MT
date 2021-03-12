@@ -1,194 +1,63 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
-import {
-  Data,
-  detectHashOnScroll,
-  disableSmartScroll,
-  enableSmartScroll,
-} from './utils'
-import {
-  Loader,
-  Menu,
-  Page,
-  PageWithScroll,
-} from './components'
-import { useHashHooks, useScrollHooks } from './hooks'
+import Container from './Container'
+import StoreContext from './context/storeContext'
+import IStoreContextValue from './interfaces/IStoreContextValue'
 
-import {
-  IScrollContextValue,
-  IStoreContextValue,
-} from './interfaces'
+import { Data } from './utils'
+import { useHashHooks } from './hooks'
 
-import './app.css'
-
-const data = Data.getInstance()
-const menuItems = data.getMenuItems()
-const pagesWithSlider = data.getSliderImgs()
-
-const lastPage = menuItems.pop()
-
-const changeCurrentRoute = (route: string): void => {
-  scrollContextValue.currentActive = route
-}
-
-const scrollContextValue: IScrollContextValue = {
-  actions: {
-    changeCurrentRoute,
-  },
-  currentActive: '',
-}
-
-const toggleMenuIsOpen = () => {
-  storeContextValue.menuIsOpen = !storeContextValue.menuIsOpen
-}
-
-const toggleIsMobile = () => {
-  storeContextValue.isMobile = !storeContextValue.isMobile
-}
-
-const storeContextValue: IStoreContextValue = {
-  menuIsOpen: false,
-  isMobile: false,
-  actions: {
-    toggleIsMobile,
-    toggleMenuIsOpen,
-  },
-}
-
-function App() {
-  const hash = useHashHooks()
-  const [loaderStarted, setLoaderStarted] = useState(false)
-  const [loaderEnded, setLoaderEndend] = useState(false)
-  const { scrollingRoute, setActive } = useScrollHooks(
-    scrollContextValue
+const App = () => {
+  const data = useMemo(() => Data.getInstance(), [])
+  const getPagesWithSlider = useCallback(
+    () => data.getSliderImgs(),
+    [data]
+  )
+  const menuItems = useMemo(() => data.getMenuItems(), [
+    data,
+  ])
+  const menuConfiguration = useMemo(
+    () => data.getNavigation(),
+    [data]
   )
 
-  const [menuIsOpen, toggleMenuState] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth <= 1024
+  )
+  const hash = useHashHooks()
 
-  const isMobile = window.innerWidth <= 1024
-
-  const toggleMenu = () => {
-    toggleMenuState(!menuIsOpen)
+  const storeContextValue: IStoreContextValue = {
+    content: {
+      link: document.links,
+      menuConfiguration: menuConfiguration,
+      menuItems,
+      pagesWithSlider: getPagesWithSlider(),
+    },
+    menu: {
+      isOpen,
+      toggleState: useCallback(
+        () => setIsOpen((s) => !s),
+        []
+      ),
+    },
+    mobile: {
+      isMobile,
+      toggleState: useCallback(
+        () => setIsMobile((s) => !s),
+        []
+      ),
+    },
+    scrollManagement: {
+      hash,
+    },
   }
-
-  useEffect(() => {
-    window.location.hash = menuItems[0]
-  }, [])
-
-  useEffect(() => {
-    // Disable the detection hash if menu are open.
-    const sections = document.querySelectorAll('section')
-    const positionSections = getPositionOfEachSections(
-      sections
-    )
-
-    const scrollManagementMenu = () => {
-      detectHashOnScroll(sections, positionSections)
-    }
-    if (isMobile && sections.length !== 0) {
-      if (menuIsOpen) {
-        document.removeEventListener(
-          'scroll',
-          scrollManagementMenu
-        )
-        return
-      }
-      document.addEventListener(
-        'scroll',
-        scrollManagementMenu
-      )
-
-      return () => {
-        document.removeEventListener(
-          'scroll',
-          scrollManagementMenu
-        )
-      }
-    }
-  }, [menuIsOpen, loaderEnded])
-
-  useEffect(() => {
-    if (!loaderEnded) {
-      return
-    }
-    enableSmartScroll(scrollingRoute)
-    return () => {
-      disableSmartScroll(scrollingRoute)
-    }
-  }, [loaderEnded])
-
-  useEffect(() => {
-    hash === '' && (window.location.hash = menuItems[0])
-
-    setActive(hash)
-  }, [hash])
 
   return (
-    <div
-      className='App'
-      style={{
-        display: 'flex',
-        flexFlow: 'wrap',
-      }}
-    >
-      {!loaderEnded && (
-        <Loader
-          setLoaderEndend={setLoaderEndend}
-          setLoaderStarted={setLoaderStarted}
-          isMobile={isMobile}
-        />
-      )}
-      {loaderStarted && (
-        <>
-          <Menu
-            itemsNavigation={data.getNavigation()}
-            isMobile={isMobile}
-            toggleMenu={toggleMenu}
-            menuIsOpen={menuIsOpen}
-            setActive={setActive}
-          />
-          {Object.keys(pagesWithSlider).map(
-            (page, index) => (
-              <Page
-                anchor={page}
-                key={index}
-                sliderImg={pagesWithSlider[page]}
-              />
-            )
-          )}
-          {lastPage && (
-            <PageWithScroll
-              anchor={lastPage}
-              isMobile={isMobile}
-              previousAnchor={
-                menuItems[data.getMenuItemsLenght() - 2]
-              }
-            />
-          )}
-        </>
-      )}
-    </div>
+    <StoreContext.Provider value={storeContextValue}>
+      <Container />
+    </StoreContext.Provider>
   )
 }
 
-function getPositionOfEachSections(
-  sections: NodeListOf<HTMLElement>
-): number[][] {
-  let sectionPosition: number[][] = []
-  for (let index = 0; index < sections.length; index++) {
-    const element = sections[index]
-    if (typeof sectionPosition[0] === 'undefined') {
-      sectionPosition = [[0, element.clientHeight]]
-    } else {
-      const previousValue =
-        sectionPosition[sectionPosition.length - 1]
-      const nextValue = [
-        previousValue[1],
-        previousValue[1] + element.clientHeight,
-      ]
-      sectionPosition.push(nextValue)
-    }
-  }
-  return sectionPosition
-}
 export default App

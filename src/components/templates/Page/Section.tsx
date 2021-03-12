@@ -1,11 +1,18 @@
 import { debounce, throttle } from 'lodash'
-import { FC, useEffect, useMemo, useState } from 'react'
+import {
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { Fade } from '..'
 
+import StoreContext from '../../../context/storeContext'
+
 import { Data } from '../../../utils'
 import { IContent } from '../../../interfaces'
-import { useHashHooks } from '../../../hooks'
 
 import './page.css'
 
@@ -19,14 +26,15 @@ const Section: FC<PropsSection> = ({ section }) => {
   const [scrollEnded, setScrollEnded] = useState(true)
   const isMobile = window.innerWidth <= 1024
 
-  const hash = useHashHooks()
+  const store = useContext(StoreContext)
+
   // Only mount the active component
   useEffect(() => {
     setActiveSection(
       `#${section}` === window.location.hash ||
         window.location.hash === ''
     )
-  }, [hash])
+  }, [store.scrollManagement.hash])
 
   // Waiting for the scroll are done to mount the element
   useEffect(() => {

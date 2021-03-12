@@ -1,5 +1,8 @@
 import { throttle } from 'lodash'
 
+export const blockScroll = (e: MouseEvent | TouchEvent) =>
+  e.preventDefault()
+
 export const disableSmartScroll = (
   scrollingRoute: (e: WheelEvent | KeyboardEvent) => void
 ) => {
@@ -10,7 +13,7 @@ export const disableSmartScroll = (
       trailing: false,
     })
   )
-
+  window.removeEventListener('wheel', blockScroll)
   window.removeEventListener(
     'wheel',
     throttle(scrollingRoute, 1000, {
@@ -30,13 +33,12 @@ export const enableSmartScroll = (
       trailing: false,
     })
   )
-
+  window.addEventListener('wheel', blockScroll, {
+    passive: false,
+  })
   window.addEventListener(
     'wheel',
-    throttle(scrollingRoute, 1000, {
-      leading: true,
-      trailing: false,
-    })
+    throttle(scrollingRoute, 1000)
   )
 }
 
@@ -46,18 +48,26 @@ export const disableScrollOnMenu = (
   e.preventDefault()
 }
 
+/**
+ * Change the hash when scrolling, and return the index of the current hash
+ * @param sections
+ * @param positionSections
+ * @returns
+ */
 export const detectHashOnScroll = (
   sections: NodeListOf<HTMLElement>,
   positionSections: number[][]
-): void => {
+): number => {
   const windowPosition = window.pageYOffset
   const sectionIndex = positionSections.findIndex(
     (element) =>
-      windowPosition >= element[0] &&
-      windowPosition < element[1]
+      windowPosition >= element[0] - 50 &&
+      windowPosition < element[1] - 50
   )
   const currentSection = sections[sectionIndex].id
   if (window.location.hash !== currentSection) {
     window.location.hash = currentSection
   }
+
+  return sectionIndex
 }

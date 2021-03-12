@@ -1,6 +1,5 @@
-import { FC, useMemo, useRef } from 'react'
-
-import { useHashHooks } from '../../../hooks'
+import { FC, useContext, useMemo, useRef } from 'react'
+import StoreContext from '../../../context/storeContext'
 
 interface PropsPageWithScroll {
   anchor: string
@@ -12,10 +11,11 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
   isMobile,
   previousAnchor,
 }) => {
-  const hash = useHashHooks()
-  const isActive = useMemo(() => hash === `#${anchor}`, [
-    hash,
-  ])
+  const store = useContext(StoreContext)
+  const isActive = useMemo(
+    () => store.scrollManagement.hash === `#${anchor}`,
+    [store.scrollManagement.hash]
+  )
   const page = useRef<HTMLTableSectionElement>(null)
   const menuHeight = document.getElementById('menu')
     ?.offsetHeight

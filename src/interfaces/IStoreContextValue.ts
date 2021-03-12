@@ -1,8 +1,23 @@
+import { IMenu, ISliderConfiguration } from '.'
+
 export default interface IStoreContextValue {
-  actions: {
-    toggleMenuIsOpen: () => void
-    toggleIsMobile: () => void
+  content: {
+    link?: HTMLCollectionOf<
+      HTMLAnchorElement | HTMLAreaElement
+    >
+    menuConfiguration: IMenu
+    menuItems: string[]
+    pagesWithSlider: ISliderConfiguration
   }
-  menuIsOpen: boolean
-  isMobile: boolean
+  menu: {
+    isOpen: boolean
+    toggleState: () => void
+  }
+  mobile: {
+    isMobile: boolean
+    toggleState: () => void
+  }
+  scrollManagement: {
+    hash: string
+  }
 }
