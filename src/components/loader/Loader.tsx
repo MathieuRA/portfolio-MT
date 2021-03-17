@@ -22,16 +22,13 @@ const Loader: FC<PropsLoader> = React.memo(
       current!.style.display = 'block'
       current!.play()
       current?.addEventListener('ended', function () {
-        loaderContainer.current!.style.height = '0'
-        setTimeout(() => {
-          this.style.width = '0'
-        }, 200)
+        loaderContainer.current!.style.opacity = '0'
       })
     }, [])
 
     const removeLoader = useCallback(
       (e: TransitionEventInit) =>
-        e.propertyName === 'height' &&
+        e.propertyName === 'opacity' &&
         setLoaderEndend(true),
       []
     )
@@ -60,7 +57,7 @@ const Loader: FC<PropsLoader> = React.memo(
           display: 'flex',
           height: '100vh',
           position: 'absolute',
-          transition: '1s',
+          transition: '1.5s',
           width: '100%',
           zIndex: 110,
         }}
@@ -74,7 +71,7 @@ const Loader: FC<PropsLoader> = React.memo(
             display: 'none',
             margin: 'auto',
             transition: '0.5s',
-            width: `${isMobile ? 100 : 50}%`,
+            width: `${isMobile ? 100 : 60}%`,
           }}
         >
           <source

@@ -119,6 +119,7 @@ const Menu: FC<PropsMenu> = React.memo(
               >
                 <Link
                   anchor
+                  disabled
                   HTMLClass='lastMenuItem'
                   index={4}
                   label={contact.toUpperCase()}
@@ -289,6 +290,11 @@ const Portal: FC<PropsPortal> = ({
             <Link
               actionOnClick={toggleMenu}
               anchor
+              disabled={
+                fullMenuItems.length - 1 === index
+                  ? true
+                  : false
+              }
               index={index}
               HTMLClass={`itemBurgerMenu ${
                 fullMenuItems.length - 1 === index

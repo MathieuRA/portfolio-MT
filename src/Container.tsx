@@ -50,7 +50,15 @@ class Container extends Component<{}, StateContainer> {
   }
 
   componentDidMount() {
-    window.location.hash = this.context.content.menuItems[0]
+    // Dont show the loader if the website was previously loaded
+    const tabsIndex = sessionStorage.getItem('tabsIndex')
+    if (tabsIndex !== null) {
+      Container.URL = +tabsIndex
+      this.setState({
+        loaderEndend: true,
+        loaderStarted: true,
+      })
+    }
     this.lastPage = this.context.content.menuItems.pop()!
     window.addEventListener('resize', this._debounceResize)
     if (this.state.isMobile) {
@@ -171,6 +179,10 @@ class Container extends Component<{}, StateContainer> {
     }
     down ? Container.URL++ : Container.URL--
     window.location.hash = menuItems[Container.URL]
+    sessionStorage.setItem(
+      'tabsIndex',
+      Container.URL.toString()
+    )
   }
 
   _detectHashOnScroll = () => {
