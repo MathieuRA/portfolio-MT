@@ -159,9 +159,14 @@
   }
   #listMenu .itemBurgerMenu#active::before {
     border: none !important;
+    border-bottom: 1px solid var(--main-gold) !important;
+  }
+  #active::before {
+    left: 10% !important;
+    top: 3px;
+    width: 80% !important;
   }
   #listMenu .itemBurgerMenu#active {
     color: var(--main-gold);
-    border-bottom: 1px solid var(--main-gold);
   }
 }
