@@ -1,0 +1,14 @@
+.disableLink {
+  transition: 0.4s;
+  cursor: pointer;
+}
+.disableLink:hover {
+  color: #504f4f !important;
+}
+.disableLink:hover .tooltip {
+  opacity: 1;
+}
+.disableLink::before,
+.disableLink::after {
+  border: none !important;
+}

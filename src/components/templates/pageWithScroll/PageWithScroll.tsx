@@ -1,6 +1,6 @@
-import { FC, useMemo, useRef } from 'react'
-
-import { useHashHooks } from '../../../hooks'
+import { FC, useContext, useMemo, useRef } from 'react'
+import StoreContext from '../../../context/storeContext'
+import Clapperboard from '../../clapperboard/Clapperboard'
 
 interface PropsPageWithScroll {
   anchor: string
@@ -12,10 +12,11 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
   isMobile,
   previousAnchor,
 }) => {
-  const hash = useHashHooks()
-  const isActive = useMemo(() => hash === `#${anchor}`, [
-    hash,
-  ])
+  const store = useContext(StoreContext)
+  const isActive = useMemo(
+    () => store.scrollManagement.hash === `#${anchor}`,
+    [store.scrollManagement.hash]
+  )
   const page = useRef<HTMLTableSectionElement>(null)
   const menuHeight = document.getElementById('menu')
     ?.offsetHeight
@@ -54,48 +55,14 @@ const PageWithScroll: FC<PropsPageWithScroll> = ({
       >
         <div
           style={{
-            width: '80%',
+            width: '100%',
+            height: '40vh',
             margin: '20px auto',
             fontSize: '0.4em',
             color: 'var(--main-grey)',
           }}
         >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-            fontSize: '0.4em',
-            color: 'var(--main-grey)',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
-        </div>
-        <div
-          style={{
-            width: '80%',
-            margin: '20px auto',
-            fontSize: '0.4em',
-            color: 'var(--main-grey)',
-          }}
-        >
-          Lorem ipsum dolor, sit amet consectetur
-          adipisicing elit. Quisquam nesciunt necessitatibus
-          consequatur, hic perferendis tempora illo sint
-          veritatis voluptas, neque voluptatem deserunt
-          voluptatum optio nemo consequuntur quos error
-          blanditiis quae!
+          <Clapperboard />
         </div>
       </div>
     </section>

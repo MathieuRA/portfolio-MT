@@ -1,4 +1,10 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useRef,
+} from 'react'
 import { createPortal } from 'react-dom'
 
 import { Link } from '../templates'
@@ -6,8 +12,9 @@ import { Link } from '../templates'
 import { disableScrollOnMenu } from '../../utils'
 import { IMenu } from '../../interfaces'
 
+import StoreContext from '../../context/storeContext'
+
 import './menu.css'
-import { useHashHooks, useScrollHooks } from '../../hooks'
 
 const BURGERMENUCONFIG = {
   close: {
@@ -34,89 +41,98 @@ const BURGERMENUCONFIG = {
 }
 
 interface PropsMenu {
-  itemsNavigation: IMenu
-  isMobile: Boolean
+  menuConfiguration: IMenu
+  isMobile: boolean
   toggleMenu: Function
-  menuIsOpen: Boolean
-  setActive: Function
+  menuIsOpen: boolean
 }
-const Menu: FC<PropsMenu> = ({
-  itemsNavigation,
-  isMobile,
-  toggleMenu,
-  setActive,
-}) => {
-  const listCollapsedMenu = useRef<HTMLDivElement>(null)
+const Menu: FC<PropsMenu> = React.memo(
+  ({
+    menuConfiguration,
+    isMobile,
+    toggleMenu,
+    menuIsOpen,
+  }) => {
+    const listCollapsedMenu = useRef<HTMLDivElement>(null)
 
-  const {
-    contact,
-    leftPart,
-    logo,
-    rightPart,
-  } = itemsNavigation
-  const { alt, src } = logo
+    const {
+      contact,
+      leftPart,
+      logo,
+      rightPart,
+    } = menuConfiguration
+    const { alt, src } = logo
 
-  const toggleMenuList = (e: HTMLDivElement | any) => {
-    // Mean start of the animation
-    if (e instanceof HTMLDivElement) {
-      e.style.opacity === '0' && (e.style.display = 'block')
-      return
+    const toggleMenuList = (e: HTMLDivElement | any) => {
+      // Mean start of the animation
+      if (e instanceof HTMLDivElement) {
+        e.style.opacity === '0' &&
+          (e.style.display = 'block')
+        toggleMenu()
+
+        return
+      }
+      // When animation ended
+      e.target.style.opacity === '0'
+        ? (e.target.style.display = 'none')
+        : (e.target.style.display = 'block')
     }
-    // When animation ended
-    e.target.style.opacity === '0'
-      ? (e.target.style.display = 'none')
-      : (e.target.style.display = 'block')
-    toggleMenu()
-  }
 
-  return (
-    <>
-      {isMobile && (
-        <div
-          id='listMenu'
-          onTransitionEnd={toggleMenuList}
-          ref={listCollapsedMenu}
-          style={{
-            opacity: 0,
-          }}
-        ></div>
-      )}
-      <nav id='menu'>
-        {isMobile ? (
-          <CollapseMenu
-            itemsNavigation={itemsNavigation}
-            portal={listCollapsedMenu.current}
-            toggleMenuList={toggleMenuList}
-            setActive={setActive}
-          />
-        ) : (
-          <>
-            <MenuSection position={'left'} items={leftPart}>
-              <a href='#'>
-                <img
-                  alt={alt}
-                  src={src}
-                  style={{ width: 110, height: 'auto' }}
-                />
-              </a>
-            </MenuSection>
-            <MenuSection
-              position={'right'}
-              items={rightPart}
-            >
-              <Link
-                anchor
-                HTMLClass='lastMenuItem'
-                label={contact.toUpperCase()}
-                to={contact}
-              />
-            </MenuSection>
-          </>
+    return (
+      <>
+        {isMobile && (
+          <div
+            id='listMenu'
+            onTransitionEnd={toggleMenuList}
+            ref={listCollapsedMenu}
+            style={{
+              opacity: 0,
+            }}
+          ></div>
         )}
-      </nav>
-    </>
-  )
-}
+
+        <nav id='menu'>
+          {isMobile ? (
+            <CollapseMenu
+              itemsNavigation={menuConfiguration}
+              portal={listCollapsedMenu}
+              toggleMenuList={toggleMenuList}
+              menuIsOpen={menuIsOpen}
+            />
+          ) : (
+            <>
+              <MenuSection
+                position={'left'}
+                items={leftPart}
+              >
+                <a href='#'>
+                  <img
+                    alt={alt}
+                    src={src}
+                    style={{ width: 110, height: 'auto' }}
+                  />
+                </a>
+              </MenuSection>
+              <MenuSection
+                position={'right'}
+                items={rightPart}
+              >
+                <Link
+                  anchor
+                  disabled
+                  HTMLClass='lastMenuItem'
+                  index={4}
+                  label={contact.toUpperCase()}
+                  to={contact}
+                />
+              </MenuSection>
+            </>
+          )}
+        </nav>
+      </>
+    )
+  }
+)
 
 interface MenuSectionProps {
   items: string[]
@@ -137,6 +153,7 @@ const MenuSection: FC<MenuSectionProps> = ({
               <li key={i}>
                 <Link
                   anchor
+                  index={i}
                   label={item.toUpperCase()}
                   to={item}
                 />
@@ -151,6 +168,8 @@ const MenuSection: FC<MenuSectionProps> = ({
               <li key={i}>
                 <Link
                   anchor
+                  // WORKAROUND
+                  index={i + 2}
                   label={item.toUpperCase()}
                   to={item}
                 />
@@ -166,24 +185,25 @@ const MenuSection: FC<MenuSectionProps> = ({
 
 interface PropsCollpaseMenu {
   itemsNavigation: IMenu
-  portal: HTMLDivElement | null
+  portal: {
+    current: HTMLDivElement | null
+  }
   toggleMenuList: Function
-  setActive: Function
+  menuIsOpen: boolean
 }
 const CollapseMenu: FC<PropsCollpaseMenu> = ({
   itemsNavigation,
   portal,
   toggleMenuList,
-  setActive,
+  menuIsOpen,
 }) => {
-  const [menuIsOpen, setMenuIsOpen] = useState(false)
-  useEffect(() => {
-    portal?.addEventListener(
+  useLayoutEffect(() => {
+    portal.current?.addEventListener(
       'touchmove',
       disableScrollOnMenu
     )
     return () => {
-      portal?.removeEventListener(
+      portal.current?.removeEventListener(
         'touchmove',
         disableScrollOnMenu
       )
@@ -201,19 +221,20 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 
   const fullMenuItems = [...leftPart, ...rightPart, contact]
 
-  // Use context for create globalStore with one property ScrollFromLink: Boolean
+  const { current } = portal
 
-  const toggleMenu = () => {
-    toggleMenuList(portal)
-    if (portal) {
-      menuIsOpen
-        ? (portal.style.opacity = '0')
-        : setTimeout(() => {
-            portal.style.opacity = '1'
-          }, 50)
-    }
-    setMenuIsOpen(!menuIsOpen)
-  }
+  const toggleMenu = useCallback(() => {
+    const { current } = portal
+    toggleMenuList(current)
+    // Timeout to wait portal display are changing from none
+    setTimeout(() => {
+      if (current) {
+        menuIsOpen
+          ? (current.style.opacity = '0')
+          : (current.style.opacity = '1')
+      }
+    }, 10)
+  }, [portal, menuIsOpen])
 
   return (
     <>
@@ -238,14 +259,13 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
           />
         ))}
       </div>
-      {portal !== null &&
+      {current !== null &&
         createPortal(
           <Portal
             fullMenuItems={fullMenuItems}
             toggleMenu={toggleMenu}
-            setActive={setActive}
           />,
-          portal
+          current
         )}
     </>
   )
@@ -254,18 +274,14 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 interface PropsPortal {
   fullMenuItems: string[]
   toggleMenu: Function
-  setActive: Function
 }
 
 const Portal: FC<PropsPortal> = ({
   fullMenuItems,
   toggleMenu,
-  setActive,
 }) => {
-  const hash = useHashHooks()
-  useEffect(() => {
-    setActive(hash)
-  }, [])
+  const store = useContext(StoreContext)
+
   return (
     <ul>
       {fullMenuItems.map((item, index) => {
@@ -274,6 +290,12 @@ const Portal: FC<PropsPortal> = ({
             <Link
               actionOnClick={toggleMenu}
               anchor
+              disabled={
+                fullMenuItems.length - 1 === index
+                  ? true
+                  : false
+              }
+              index={index}
               HTMLClass={`itemBurgerMenu ${
                 fullMenuItems.length - 1 === index
                   ? 'lastMenuItem'

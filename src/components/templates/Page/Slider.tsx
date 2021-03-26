@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from 'react'
 import IndicatorDots from './CarouselDots'
 
 import { Carousel } from '../../../packages/'
-import { useHashHooks } from '../../../hooks'
 
 import './page.css'
 import './slider.css'
@@ -20,18 +19,18 @@ interface PropsSlider {
 }
 const Slider: FC<PropsSlider> = ({ anchor, imgs }) => {
   const [active, setActive] = useState(false)
-  const hash = useHashHooks()
 
+  // To rerender the componenet and reload the Carousel.auto
   useEffect(() => {
     const showedSlider =
       `#${anchor}` === window.location.hash
     showedSlider !== active && setActive(showedSlider)
-  }, [hash])
+  }, [window.location.hash])
 
   return (
     <div className='slider'>
       <Carousel
-        auto={active}
+        auto={window.location.hash === `#${anchor}`}
         axis={'x'}
         duration={1500}
         loop
