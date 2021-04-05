@@ -8,3 +8,8 @@ export {
 } from './scrollManagement'
 export { getPositionOfEachSections } from './arithmeticOperation'
 export { noop } from './functionManagement'
+export {
+  isValidInput,
+  formIsValid,
+  isValidAntispam,
+} from './formsManagement'

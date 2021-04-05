@@ -167,6 +167,6 @@
     width: 80% !important;
   }
   #listMenu .itemBurgerMenu#active {
-    color: var(--main-gold);
+    color: var(--main-gold) !important;
   }
 }

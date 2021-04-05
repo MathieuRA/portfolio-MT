@@ -18,6 +18,17 @@ body {
 .App {
   display: flex;
   flex-flow: wrap;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(190, 185, 185, 1) 11%,
+    rgba(126, 126, 126, 1) 17%,
+    rgba(60, 60, 60, 1) 23%,
+    rgba(0, 0, 0, 1) 34%
+  );
+  background-size: 100% 90px;
+  background-repeat: no-repeat;
 }
 .customLink {
   text-decoration: none;

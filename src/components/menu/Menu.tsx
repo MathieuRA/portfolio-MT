@@ -1,7 +1,6 @@
 import React, {
   FC,
   useCallback,
-  useContext,
   useLayoutEffect,
   useRef,
 } from 'react'
@@ -11,8 +10,6 @@ import { Link } from '../templates'
 
 import { disableScrollOnMenu } from '../../utils'
 import { IMenu } from '../../interfaces'
-
-import StoreContext from '../../context/storeContext'
 
 import './menu.css'
 
@@ -45,6 +42,7 @@ interface PropsMenu {
   isMobile: boolean
   toggleMenu: Function
   menuIsOpen: boolean
+  setRoute: (route: 'home' | 'contact') => void
 }
 const Menu: FC<PropsMenu> = React.memo(
   ({
@@ -52,6 +50,7 @@ const Menu: FC<PropsMenu> = React.memo(
     isMobile,
     toggleMenu,
     menuIsOpen,
+    setRoute,
   }) => {
     const listCollapsedMenu = useRef<HTMLDivElement>(null)
 
@@ -104,6 +103,7 @@ const Menu: FC<PropsMenu> = React.memo(
               <MenuSection
                 position={'left'}
                 items={leftPart}
+                setRoute={setRoute}
               >
                 <a href='#'>
                   <img
@@ -116,10 +116,13 @@ const Menu: FC<PropsMenu> = React.memo(
               <MenuSection
                 position={'right'}
                 items={rightPart}
+                setRoute={setRoute}
               >
                 <Link
                   anchor
-                  disabled
+                  actionOnClick={() => {
+                    setRoute('contact')
+                  }}
                   HTMLClass='lastMenuItem'
                   index={4}
                   label={contact.toUpperCase()}
@@ -137,11 +140,13 @@ const Menu: FC<PropsMenu> = React.memo(
 interface MenuSectionProps {
   items: string[]
   position: string
+  setRoute: (route: 'home' | 'contact') => void
 }
 const MenuSection: FC<MenuSectionProps> = ({
   children,
   items,
   position,
+  setRoute,
 }) => {
   return (
     <div className='divisedMenu'>
@@ -152,6 +157,9 @@ const MenuSection: FC<MenuSectionProps> = ({
             {items.map((item, i) => (
               <li key={i}>
                 <Link
+                  actionOnClick={() => {
+                    setRoute('home')
+                  }}
                   anchor
                   index={i}
                   label={item.toUpperCase()}
@@ -167,6 +175,9 @@ const MenuSection: FC<MenuSectionProps> = ({
             {items.map((item, i) => (
               <li key={i}>
                 <Link
+                  actionOnClick={() => {
+                    setRoute('home')
+                  }}
                   anchor
                   // WORKAROUND
                   index={i + 2}
@@ -280,8 +291,6 @@ const Portal: FC<PropsPortal> = ({
   fullMenuItems,
   toggleMenu,
 }) => {
-  const store = useContext(StoreContext)
-
   return (
     <ul>
       {fullMenuItems.map((item, index) => {
@@ -290,11 +299,6 @@ const Portal: FC<PropsPortal> = ({
             <Link
               actionOnClick={toggleMenu}
               anchor
-              disabled={
-                fullMenuItems.length - 1 === index
-                  ? true
-                  : false
-              }
               index={index}
               HTMLClass={`itemBurgerMenu ${
                 fullMenuItems.length - 1 === index

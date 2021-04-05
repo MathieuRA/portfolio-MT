@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 
 import './clapperboard.css'
-// import './clapperboard.js'
 
 const Clapperboard = () => {
   const stick = useRef<HTMLDivElement>(null)

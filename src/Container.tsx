@@ -17,15 +17,17 @@ import {
 } from './components'
 
 import './app.css'
+import Contact from './components/contact/Contact'
 
 type StateContainer = {
-  isMobile: boolean
-  loaderStarted: boolean
-  loaderEndend: boolean
   event: {
     detectHash: boolean
     smoothScroll: boolean
   }
+  isMobile: boolean
+  loaderStarted: boolean
+  loaderEndend: boolean
+  route: 'home' | 'contact'
 }
 class Container extends Component<{}, StateContainer> {
   static contextType = StoreContext
@@ -39,13 +41,14 @@ class Container extends Component<{}, StateContainer> {
   constructor(props: Object) {
     super(props)
     this.state = {
-      isMobile: false,
-      loaderEndend: false,
-      loaderStarted: false,
       event: {
         detectHash: false,
         smoothScroll: false,
       },
+      isMobile: false,
+      loaderEndend: false,
+      loaderStarted: false,
+      route: 'home',
     }
   }
 
@@ -59,6 +62,10 @@ class Container extends Component<{}, StateContainer> {
         loaderStarted: true,
       })
     }
+    if (tabsIndex === '4') {
+      this.setState({ route: 'contact' })
+    }
+
     this.lastPage = this.context.content.menuItems.pop()!
     window.addEventListener('resize', this._debounceResize)
     if (this.state.isMobile) {
@@ -131,13 +138,7 @@ class Container extends Component<{}, StateContainer> {
           event: { ...state.event, smoothScroll: true },
         }),
         () => {
-          window.addEventListener(
-            'wheel',
-            throttle(this._smoothScroll, 1000, {
-              leading: true,
-              trailing: false,
-            })
-          )
+          Container.enableSmoothScrool()
         }
       )
     }
@@ -145,13 +146,7 @@ class Container extends Component<{}, StateContainer> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener(
-      'wheel',
-      throttle(this._smoothScroll, 1000, {
-        leading: true,
-        trailing: false,
-      })
-    )
+    Container.disableSmoothScrool()
     window.addEventListener('wheel', blockScroll, {
       passive: false,
     })
@@ -161,6 +156,29 @@ class Container extends Component<{}, StateContainer> {
     )
   }
 
+  static enableSmoothScrool() {
+    window.addEventListener(
+      'wheel',
+      Container._throttleSmoothScrool
+    )
+  }
+
+  static disableSmoothScrool() {
+    window.removeEventListener(
+      'wheel',
+      Container._throttleSmoothScrool
+    )
+  }
+
+  static _throttleSmoothScrool = throttle(
+    Container._smoothScroll,
+    1000,
+    {
+      leading: true,
+      trailing: false,
+    }
+  )
+
   _debounceResize = debounce(() => {
     const { isMobile, toggleState } = this.context.mobile
     if (isMobile !== window.innerWidth <= 1024) {
@@ -168,7 +186,7 @@ class Container extends Component<{}, StateContainer> {
     }
   }, 50)
 
-  _smoothScroll(e: WheelEvent) {
+  static _smoothScroll(e: WheelEvent) {
     const menuItems = Data.getInstance().getMenuItems()
     const down = e.deltaY > 1
     if (
@@ -226,6 +244,10 @@ class Container extends Component<{}, StateContainer> {
     }
   }
 
+  setRoute = (route: 'home' | 'contact') => {
+    this.setState({ route })
+  }
+
   render() {
     return (
       <div
@@ -248,31 +270,39 @@ class Container extends Component<{}, StateContainer> {
               isMobile={this.context.mobile.isMobile}
               toggleMenu={this.context.menu.toggleState}
               menuIsOpen={this.context.menu.isOpen}
+              setRoute={this.setRoute}
             />
 
-            {Object.keys(
-              this.context.content.pagesWithSlider
-            ).map((page, i) => (
-              <Page
-                anchor={page}
-                key={i}
-                sliderImg={
-                  this.context.content.pagesWithSlider[page]
-                }
-              />
-            ))}
-            {this.lastPage && (
-              <PageWithScroll
-                anchor={this.lastPage}
-                isMobile={this.context.mobile.isMobile}
-                previousAnchor={
-                  this.context.content.menuItems[
-                    this.context.content.menuItems.length -
-                      2
-                  ]
-                }
-              />
+            {this.state.route === 'home' && (
+              <>
+                {Object.keys(
+                  this.context.content.pagesWithSlider
+                ).map((page, i) => (
+                  <Page
+                    anchor={page}
+                    key={i}
+                    sliderImg={
+                      this.context.content.pagesWithSlider[
+                        page
+                      ]
+                    }
+                  />
+                ))}
+                {this.lastPage && (
+                  <PageWithScroll
+                    anchor={this.lastPage}
+                    isMobile={this.context.mobile.isMobile}
+                    previousAnchor={
+                      this.context.content.menuItems[
+                        this.context.content.menuItems
+                          .length - 2
+                      ]
+                    }
+                  />
+                )}
+              </>
             )}
+            {this.state.route === 'contact' && <Contact />}
           </>
         )}
       </div>
