@@ -44,13 +44,19 @@ form div textarea {
 }
 
 form button {
-  padding: 10px 35px;
-  font-size: 1.5em;
   background-color: var(--main-gold);
   border: none;
-  outline: 1px solid black;
+  cursor: pointer;
   color: white;
+  padding: 10px 35px;
+  font-size: 1.5em;
+  transition: 0.4s;
+  outline: 1px solid black;
   width: fit-content;
+}
+
+form button:hover {
+  background-color: #d8ab55;
 }
 
 form small {

@@ -77,6 +77,18 @@ const Menu: FC<PropsMenu> = React.memo(
         : (e.target.style.display = 'block')
     }
 
+    const _setHomeRoute = () => {
+      setRoute('home')
+    }
+
+    const _setContactRoute = () => {
+      setRoute('contact')
+    }
+
+    const route = {
+      setHome: _setHomeRoute,
+      setContact: _setContactRoute,
+    }
     return (
       <>
         {isMobile && (
@@ -97,13 +109,14 @@ const Menu: FC<PropsMenu> = React.memo(
               portal={listCollapsedMenu}
               toggleMenuList={toggleMenuList}
               menuIsOpen={menuIsOpen}
+              route={route}
             />
           ) : (
             <>
               <MenuSection
                 position={'left'}
                 items={leftPart}
-                setRoute={setRoute}
+                setRoute={_setHomeRoute}
               >
                 <a href='#'>
                   <img
@@ -116,13 +129,11 @@ const Menu: FC<PropsMenu> = React.memo(
               <MenuSection
                 position={'right'}
                 items={rightPart}
-                setRoute={setRoute}
+                setRoute={_setHomeRoute}
               >
                 <Link
                   anchor
-                  actionOnClick={() => {
-                    setRoute('contact')
-                  }}
+                  actionOnClick={_setContactRoute}
                   HTMLClass='lastMenuItem'
                   index={4}
                   label={contact.toUpperCase()}
@@ -157,9 +168,7 @@ const MenuSection: FC<MenuSectionProps> = ({
             {items.map((item, i) => (
               <li key={i}>
                 <Link
-                  actionOnClick={() => {
-                    setRoute('home')
-                  }}
+                  actionOnClick={setRoute}
                   anchor
                   index={i}
                   label={item.toUpperCase()}
@@ -175,9 +184,7 @@ const MenuSection: FC<MenuSectionProps> = ({
             {items.map((item, i) => (
               <li key={i}>
                 <Link
-                  actionOnClick={() => {
-                    setRoute('home')
-                  }}
+                  actionOnClick={setRoute}
                   anchor
                   // WORKAROUND
                   index={i + 2}
@@ -199,12 +206,17 @@ interface PropsCollpaseMenu {
   portal: {
     current: HTMLDivElement | null
   }
+  route: {
+    setHome: () => void
+    setContact: () => void
+  }
   toggleMenuList: Function
   menuIsOpen: boolean
 }
 const CollapseMenu: FC<PropsCollpaseMenu> = ({
   itemsNavigation,
   portal,
+  route,
   toggleMenuList,
   menuIsOpen,
 }) => {
@@ -274,6 +286,7 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
         createPortal(
           <Portal
             fullMenuItems={fullMenuItems}
+            route={route}
             toggleMenu={toggleMenu}
           />,
           current
@@ -284,20 +297,37 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
 
 interface PropsPortal {
   fullMenuItems: string[]
+  route: {
+    setContact: () => void
+    setHome: () => void
+  }
   toggleMenu: Function
 }
 
 const Portal: FC<PropsPortal> = ({
   fullMenuItems,
+  route,
   toggleMenu,
 }) => {
+  const _setHomeRoute = () => {
+    route.setHome()
+    toggleMenu()
+  }
+  const _setContactRoute = () => {
+    route.setContact()
+    toggleMenu()
+  }
   return (
     <ul>
       {fullMenuItems.map((item, index) => {
         return (
           <li key={index}>
             <Link
-              actionOnClick={toggleMenu}
+              actionOnClick={
+                fullMenuItems.length - 1 === index
+                  ? _setContactRoute
+                  : _setHomeRoute
+              }
               anchor
               index={index}
               HTMLClass={`itemBurgerMenu ${
