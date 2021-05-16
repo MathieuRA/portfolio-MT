@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { CSSProperties, FC } from 'react'
 import Container from '../../../Container'
 
 import './link.css'
@@ -7,8 +7,9 @@ interface PropsLink {
   actionOnClick?: Function
   anchor?: boolean
   disabled?: boolean
-  index: number
+  index?: number
   HTMLClass?: string
+  style?: CSSProperties
   label: string
   to: string
 }
@@ -19,21 +20,24 @@ const Link: FC<PropsLink> = React.memo(
     disabled = false,
     index,
     HTMLClass = '',
+    style,
     label,
     to,
   }) => {
     const action = {
       onClick: (): void => {
-        Container.URL = index
-        sessionStorage.setItem(
-          'tabsIndex',
-          index.toString()
-        )
-        if (actionOnClick) {
-          // when animation end
-          actionOnClick()
+        if (anchor && index !== undefined) {
+          Container.URL = index
+          sessionStorage.setItem(
+            'tabsIndex',
+            index.toString()
+          )
+          if (actionOnClick) {
+            // when animation end
+            actionOnClick()
+          }
+          window.location.hash = to
         }
-        anchor && (window.location.hash = to)
       },
     }
     return !disabled ? (
@@ -41,6 +45,8 @@ const Link: FC<PropsLink> = React.memo(
         {...action}
         className={`customLink ${HTMLClass}`}
         href={anchor ? `#${to}` : to}
+        style={{ ...style }}
+        target={!anchor ? '_blank' : ''}
       >
         {label}
       </a>

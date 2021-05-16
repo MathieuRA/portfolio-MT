@@ -1,4 +1,9 @@
 export default interface IContent {
-  title: string
   text: string
+  title: string
+  video: {
+    src: string
+    label: string
+    title: string
+  }
 }

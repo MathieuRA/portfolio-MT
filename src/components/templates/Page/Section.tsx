@@ -1,18 +1,20 @@
 import { debounce, throttle } from 'lodash'
 import {
   FC,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react'
 
-import { Fade } from '..'
+import { Fade, Link } from '..'
 
 import StoreContext from '../../../context/storeContext'
 
 import { Data } from '../../../utils'
 import { IContent } from '../../../interfaces'
+import { displayModalvideo } from '../../modal/Modal'
 
 import './page.css'
 
@@ -20,9 +22,8 @@ interface PropsSection {
   section: string
 }
 const Section: FC<PropsSection> = ({ section }) => {
-  const [activeSection, setActiveSection] = useState(
-    Boolean
-  )
+  const [activeSection, setActiveSection] =
+    useState(Boolean)
   const [scrollEnded, setScrollEnded] = useState(true)
   const isMobile = window.innerWidth <= 1024
 
@@ -67,9 +68,15 @@ const Section: FC<PropsSection> = ({ section }) => {
     () => Data.getInstance().getContent(section),
     [section]
   )
-  const { text, title } = useMemo(() => contents, [
-    contents,
-  ])
+  const { text, title, video } = useMemo(
+    () => contents,
+    [contents]
+  )
+
+  const displayModal = useCallback(
+    () => displayModalvideo(video),
+    [video]
+  )
 
   return (
     <div className='section'>
@@ -86,8 +93,27 @@ const Section: FC<PropsSection> = ({ section }) => {
           />
           <p
             dangerouslySetInnerHTML={{ __html: text }}
-            style={{ float: 'left' }}
+            style={{
+              fontFamily: 'nunito-regular, serif',
+              float: 'left',
+            }}
           />
+          <button
+            className='customLink colorBlue'
+            style={{
+              backgroundColor: 'unset',
+              border: 'none',
+              display: 'block',
+              margin: 'auto',
+              padding: 15,
+              fontSize: '1em',
+              position: 'relative',
+              fontFamily: 'aqua, nunito-regular, serif',
+            }}
+            onClick={displayModal}
+          >
+            {video.label}
+          </button>
         </Fade>
       }
     </div>

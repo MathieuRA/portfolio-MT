@@ -1,6 +1,38 @@
 @font-face {
   font-family: 'montserrat';
-  src: url('./fonts/Montserrat-Regular.ttf');
+  src: url('./fonts/Montserrat-Regular.eot');
+  src: url('./fonts/Montserrat-Regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('./fonts/Montserrat-Regular.woff2') format('woff2'),
+    url('./fonts/Montserrat-Regular.woff') format('woff'),
+    url('./fonts/Montserrat-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'nunito-regular';
+  src: url('./fonts/NunitoSans-Regular.eot');
+  src: url('./fonts/NunitoSans-Regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('./fonts/NunitoSans-Regular.woff2') format('woff2'),
+    url('./fonts/NunitoSans-Regular.woff') format('woff'),
+    url('./fonts/NunitoSans-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'aqua';
+  src: url('./fonts/AquaGrotesque.eot');
+  src: url('./fonts/AquaGrotesque.eot?#iefix')
+      format('embedded-opentype'),
+    url('./fonts/AquaGrotesque.woff2') format('woff2'),
+    url('./fonts/AquaGrotesque.woff') format('woff'),
+    url('./fonts/AquaGrotesque.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -32,6 +64,9 @@ body {
 }
 .customLink {
   text-decoration: none;
+}
+.colorBlue {
+  color: var(--main-blue);
 }
 @media screen and (max-width: 1024px) {
   body {

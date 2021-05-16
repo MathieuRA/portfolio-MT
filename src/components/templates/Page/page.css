@@ -15,26 +15,38 @@
 }
 
 .section > div {
+  display: flex;
+  flex-direction: column;
   font-family: 'montserrat';
   height: 50%;
   margin: auto;
-  width: 90%;
+  width: 80%;
 }
 
 .section h1 {
   color: var(--main-gold);
-  font-size: 3vw;
+  font-size: 2.5vw;
   font-style: italic;
   font-weight: 400;
 }
 
 .section p {
   color: var(--main-grey);
-  font-size: 1.05vw;
+  font-size: 1.15vw;
   line-height: 2em;
-  margin-left: 10%;
+  margin-left: 0;
   text-align: justify;
 }
+
+.customLink:hover {
+  cursor: pointer;
+}
+
+.videoYoutube {
+  color: var(--main-blue);
+  padding: 15px !important;
+}
+
 @media screen and (max-width: 1024px) {
   .section > div {
     font-size: 34px;
@@ -58,7 +70,11 @@
   .section > div {
     font-size: 6.5vw;
   }
+
   .section p {
     font-size: 0.5em;
+  }
+  .section a {
+    font-size: 0.7em;
   }
 }

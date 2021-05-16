@@ -1,11 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import { Modal } from './components/modal'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 ReactDOM.render(
   <React.StrictMode>
+    <Modal />
+    <div id='filter' />
     <App />
   </React.StrictMode>,
   document.getElementById('root')

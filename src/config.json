@@ -30,16 +30,31 @@
   },
   "content": {
     "corporate": {
+      "text": "Nex<span style='color:var(--main-gold)'>i</span>O F<span style='color:var(--main-gold)'>I</span>LMS est à votre écoute afin d’identifier et analyser vos besoins, que ce soit dans le domaine publicitaire institutionnel et/ou pédagogique. Grâce à l’apport de l’audiovisuel, nous vous accompagons afin de réaliser votre outil de communication ou de formation personnalisée, en ayant un réel impact sur vos clients et collaborateurs.",
       "title": "<span>film institutionnel</span><br/><span style='float:right;'>publicite - tutoriels</span>",
-      "text": "Je suis à votre écoute afin d’identifier et analyser vos besoins pour réaliser l’outil de communication qui augmentera votre visibilité et aura  un réel impact sur vos clients et vos collaborateurs."
+      "video": {
+        "src": "https://www.youtube.com/embed/5EDetrnxOVM",
+        "label": "VOIR LA BANDE DÉMO",
+        "title": "test"
+      }
     },
     "events": {
-      "title": "<span>film evenementiel</span><span style='float:right;' >reportage</span>",
-      "text": "Evenements culturels, familiaux, sportifs...<br>Je suis à votre écoute pour réaliser un film à l’image de votre ressenti et de votre sensibilité afin de prolonger et rendre inoubliable ces moments excpetionnels."
+      "text": "Captation visuelle et sonore d’évênements culturels, familiaux, sportifs...<br />Nex<span style='color:var(--main-gold)'>i</span>O F<span style='color:var(--main-gold)'>I</span>LMS réalisera un film à votre image qui prolongera et rendra inoubliable ces moments exceptionnels.",
+      "title": "<span>film evenementiel</span><br /><span style='float:right;' >reportage</span>",
+      "video": {
+        "src": "https://youtube.fr",
+        "label": "VOIR LA BANDE DÉMO",
+        "title": "test"
+      }
     },
     "fiction": {
+      "text": "Un projet artistique ? Qu’il soit musical, cinématographique, théâtral...<br />Nex<span style='color:var(--main-gold)'>i</span>O F<span style='color:var(--main-gold)'>I</span>LMS mettra en lumière vos idées afin de réaliser pour vous et avec vous, un film qui illustrera vos concepts et identités artistiques.",
       "title": "FICTION",
-      "text": "Un texte et une série ou écrite de mots perçus comme constituant un ensemble cohérent, porteur de sens et utilisant les structures propres à une langue. Un texte n'a pas de longueur déterminée sauf dans le cas de poèmes à forme fixe comme le sonnet ou le haïku"
+      "video": {
+        "src": "https://youtube.fr",
+        "label": "VOIR LA BANDE DÉMO",
+        "title": "test"
+      }
     }
   }
 }
