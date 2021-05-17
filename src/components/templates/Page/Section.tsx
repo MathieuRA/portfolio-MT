@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react'
 
-import { Fade, Link } from '..'
+import { Fade } from '..'
 
 import StoreContext from '../../../context/storeContext'
 

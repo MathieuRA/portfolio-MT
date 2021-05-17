@@ -22,8 +22,10 @@ export const displayModalvideo = (
       }
     }
   )
-  filter !== null &&
-    (filter.style.backgroundColor = '#000000db')
+  if (filter !== null) {
+    filter.style.backgroundColor = '#000000db'
+    filter.style.pointerEvents = 'initial'
+  }
 }
 
 interface Props {}
@@ -47,18 +49,21 @@ class Modal extends Component<Props, State> {
     }
 
     filter = document.getElementById('filter')
+    filter?.addEventListener('click', this._closeModal)
     instance = this
   }
 
   componentWillUnmount() {
     instance = undefined
+    this._closeModal()
   }
 
   _closeModal() {
-    console.log(filter)
     instance?.setState({ isOpen: false })
-    filter !== null &&
-      (filter.style.backgroundColor = 'unset')
+    if (filter !== null) {
+      filter.style.backgroundColor = 'unset'
+      filter.style.pointerEvents = 'none'
+    }
   }
 
   render() {
@@ -73,8 +78,8 @@ class Modal extends Component<Props, State> {
             border: 'none',
             fontSize: '2em',
             position: 'fixed',
-            top: this.isMobile ? '-20%' : '-10%',
-            right: this.isMobile ? '-10%' : '-5%',
+            top: '-33px',
+            right: '-33px',
           }}
           onClick={this._closeModal}
         >
