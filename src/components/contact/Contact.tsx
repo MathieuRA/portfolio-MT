@@ -1,41 +1,41 @@
+import { resolve } from 'node:url'
 import {
   ChangeEventHandler,
   createRef,
   FC,
   FormEventHandler,
   useEffect,
+  useRef,
   useState,
 } from 'react'
 import Container from '../../Container'
 
-import {
-  blockScroll,
-  formIsValid,
-  isValidAntispam,
-  isValidInput,
-} from '../../utils'
+import { formIsValid, isValidAntispam, isValidInput } from '../../utils'
+import Spinner from '../spinner/Spinner'
 
 import './contact.css'
 
-const Contact: FC = ({}) => {
-  const form = createRef<HTMLFormElement>()
+const Contact: FC = () => {
+  const form = useRef<HTMLFormElement>(null)
   const [name, setName] = useState<string>()
   const [email, setEmail] = useState<string>()
   const [subject, setSubject] = useState<string>()
   const [message, setMessage] = useState<string>()
+  const [requestSend, setRequestSend] = useState(false)
   const [validForm, setValidForm] = useState(false)
+  const [error, setError] = useState<string | undefined>(undefined)
+  const [success, setSuccess] = useState<string | undefined>(undefined)
+
+  const isMobile = window.innerWidth <= 1024
 
   useEffect(() => {
     Container.disableSmoothScrool()
-
     return () => {
       Container.enableSmoothScrool()
     }
   }, [])
 
-  const _checkNameValidity: ChangeEventHandler<HTMLInputElement> = (
-    e
-  ) => {
+  const _checkNameValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { currentTarget } = e
     if (
       isValidInput(currentTarget, 'text', {
@@ -46,9 +46,7 @@ const Contact: FC = ({}) => {
       setName(currentTarget.value)
     }
   }
-  const _checkMailValidity: ChangeEventHandler<HTMLInputElement> = (
-    e
-  ) => {
+  const _checkMailValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { currentTarget } = e
     if (
       isValidInput(currentTarget, 'email', {
@@ -60,9 +58,7 @@ const Contact: FC = ({}) => {
     }
   }
 
-  const _checkSubjectValidity: ChangeEventHandler<HTMLInputElement> = (
-    e
-  ) => {
+  const _checkSubjectValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { currentTarget } = e
     if (
       isValidInput(currentTarget, 'text', {
@@ -74,9 +70,7 @@ const Contact: FC = ({}) => {
     }
   }
 
-  const _checkTextareaValidity: ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
+  const _checkTextareaValidity: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     const { currentTarget } = e
     if (
       isValidInput(currentTarget, 'text', {
@@ -88,9 +82,7 @@ const Contact: FC = ({}) => {
     }
   }
 
-  const _formIsValid: ChangeEventHandler<HTMLFormElement> = (
-    e
-  ) => {
+  const _formIsValid: ChangeEventHandler<HTMLFormElement> = (e) => {
     if (!formIsValid(e.currentTarget)) {
       setValidForm(false)
       return
@@ -98,14 +90,44 @@ const Contact: FC = ({}) => {
     setValidForm(true)
   }
 
-  const _checkAntispam: ChangeEventHandler<HTMLInputElement> = (
-    e
-  ) => {
+  const _checkAntispam: ChangeEventHandler<HTMLInputElement> = (e) => {
     isValidAntispam(e.currentTarget, 2)
   }
 
-  const _submitForm: FormEventHandler = (e) => {
+  const _submitForm: FormEventHandler = async (e) => {
     e.preventDefault()
+    if (requestSend) {
+      return null
+    }
+
+    setRequestSend(true)
+    // Simule http request
+    const request = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (Date.now() % 2 === 1) {
+          console.log('ok')
+          reject('')
+        } else {
+          resolve('')
+        }
+      }, 1000)
+    })
+    try {
+      await request
+      form.current?.reset()
+      setError(undefined)
+      setSuccess('Message arriver à destination !')
+      setName(undefined)
+      setEmail(undefined)
+      setSubject(undefined)
+      setMessage(undefined)
+    } catch (error) {
+      setSuccess(undefined)
+      setError(
+        "L'email n'a pas été envoyé correctement. Veuillez réessayer ultérieurement"
+      )
+    }
+    setRequestSend(false)
   }
 
   return (
@@ -114,8 +136,22 @@ const Contact: FC = ({}) => {
         ref={form}
         onChange={_formIsValid}
         onSubmit={_submitForm}
+        style={{
+          height: 'calc(100vh - 85px)',
+          width: isMobile ? '90%' : '80%',
+        }}
       >
-        <div>
+        {error !== undefined && (
+          <p style={{ backgroundColor: '#ff9090', padding: 10 }}>{error}</p>
+        )}
+        {success !== undefined && (
+          <p style={{ backgroundColor: '#95e69e', padding: 10 }}>{success}</p>
+        )}
+        <div
+          style={{
+            marginBottom: isMobile ? 15 : '',
+          }}
+        >
           <label htmlFor='name'>Nom</label>
           <input
             name='name'
@@ -169,10 +205,8 @@ const Contact: FC = ({}) => {
             required
           />
         </div>
-        <small>
-          * Les caractères spéciaux ne sont pas autorisés
-        </small>
-        {validForm && <button>Envoyer</button>}
+        <small>* Les caractères spéciaux ne sont pas autorisés</small>
+        {validForm && <button>Envoyer {requestSend && <Spinner />}</button>}
       </form>
     </section>
   )

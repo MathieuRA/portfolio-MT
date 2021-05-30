@@ -1,9 +1,4 @@
-import React, {
-  FC,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-} from 'react'
+import React, { FC, useCallback, useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
 import { Link } from '../templates'
@@ -42,7 +37,8 @@ interface PropsMenu {
   isMobile: boolean
   toggleMenu: Function
   menuIsOpen: boolean
-  setRoute: (route: 'home' | 'contact') => void
+  setRoute: (route: PropsMenu['route']) => void
+  route: 'home' | 'contact'
 }
 const Menu: FC<PropsMenu> = React.memo(
   ({
@@ -51,22 +47,17 @@ const Menu: FC<PropsMenu> = React.memo(
     toggleMenu,
     menuIsOpen,
     setRoute,
+    route: appRoute,
   }) => {
     const listCollapsedMenu = useRef<HTMLDivElement>(null)
 
-    const {
-      contact,
-      leftPart,
-      logo,
-      rightPart,
-    } = menuConfiguration
+    const { contact, leftPart, logo, rightPart } = menuConfiguration
     const { alt, src } = logo
 
     const toggleMenuList = (e: HTMLDivElement | any) => {
       // Mean start of the animation
       if (e instanceof HTMLDivElement) {
-        e.style.opacity === '0' &&
-          (e.style.display = 'block')
+        e.style.opacity === '0' && (e.style.display = 'block')
         toggleMenu()
 
         return
@@ -102,7 +93,14 @@ const Menu: FC<PropsMenu> = React.memo(
           ></div>
         )}
 
-        <nav id='menu'>
+        <nav
+          id='menu'
+          style={{
+            transition: isMobile ? '0.6s' : '',
+            boxShadow: appRoute === 'contact' && !menuIsOpen ? '0px 5px 5px #656565' : '',
+            backgroundColor: appRoute === 'contact' && !menuIsOpen ? 'black' : 'unset',
+          }}
+        >
           {isMobile ? (
             <CollapseMenu
               itemsNavigation={menuConfiguration}
@@ -113,24 +111,12 @@ const Menu: FC<PropsMenu> = React.memo(
             />
           ) : (
             <>
-              <MenuSection
-                position={'left'}
-                items={leftPart}
-                setRoute={_setHomeRoute}
-              >
+              <MenuSection position={'left'} items={leftPart} setRoute={_setHomeRoute}>
                 <a href='#'>
-                  <img
-                    alt={alt}
-                    src={src}
-                    style={{ width: 110, height: 'auto' }}
-                  />
+                  <img alt={alt} src={src} style={{ width: 110, height: 'auto' }} />
                 </a>
               </MenuSection>
-              <MenuSection
-                position={'right'}
-                items={rightPart}
-                setRoute={_setHomeRoute}
-              >
+              <MenuSection position={'right'} items={rightPart} setRoute={_setHomeRoute}>
                 <Link
                   anchor
                   actionOnClick={_setContactRoute}
@@ -153,12 +139,7 @@ interface MenuSectionProps {
   position: string
   setRoute: (route: 'home' | 'contact') => void
 }
-const MenuSection: FC<MenuSectionProps> = ({
-  children,
-  items,
-  position,
-  setRoute,
-}) => {
+const MenuSection: FC<MenuSectionProps> = ({ children, items, position, setRoute }) => {
   return (
     <div className='divisedMenu'>
       {position === 'left' ? (
@@ -221,24 +202,13 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
   menuIsOpen,
 }) => {
   useLayoutEffect(() => {
-    portal.current?.addEventListener(
-      'touchmove',
-      disableScrollOnMenu
-    )
+    portal.current?.addEventListener('touchmove', disableScrollOnMenu)
     return () => {
-      portal.current?.removeEventListener(
-        'touchmove',
-        disableScrollOnMenu
-      )
+      portal.current?.removeEventListener('touchmove', disableScrollOnMenu)
     }
   }, [portal])
 
-  const {
-    contact,
-    leftPart,
-    rightPart,
-    logo,
-  } = itemsNavigation
+  const { contact, leftPart, rightPart, logo } = itemsNavigation
   const { alt, src } = logo
   const { bars, close, open } = BURGERMENUCONFIG
 
@@ -252,9 +222,7 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
     // Timeout to wait portal display are changing from none
     setTimeout(() => {
       if (current) {
-        menuIsOpen
-          ? (current.style.opacity = '0')
-          : (current.style.opacity = '1')
+        menuIsOpen ? (current.style.opacity = '0') : (current.style.opacity = '1')
       }
     }, 10)
   }, [portal, menuIsOpen])
@@ -274,21 +242,13 @@ const CollapseMenu: FC<PropsCollpaseMenu> = ({
         {bars.map((cssProperty, index) => (
           <div
             key={index}
-            style={
-              menuIsOpen
-                ? { ...cssProperty, ...open }
-                : { ...close }
-            }
+            style={menuIsOpen ? { ...cssProperty, ...open } : { ...close }}
           />
         ))}
       </div>
       {current !== null &&
         createPortal(
-          <Portal
-            fullMenuItems={fullMenuItems}
-            route={route}
-            toggleMenu={toggleMenu}
-          />,
+          <Portal fullMenuItems={fullMenuItems} route={route} toggleMenu={toggleMenu} />,
           current
         )}
     </>
@@ -304,11 +264,7 @@ interface PropsPortal {
   toggleMenu: Function
 }
 
-const Portal: FC<PropsPortal> = ({
-  fullMenuItems,
-  route,
-  toggleMenu,
-}) => {
+const Portal: FC<PropsPortal> = ({ fullMenuItems, route, toggleMenu }) => {
   const _setHomeRoute = () => {
     route.setHome()
     toggleMenu()
@@ -324,16 +280,12 @@ const Portal: FC<PropsPortal> = ({
           <li key={index}>
             <Link
               actionOnClick={
-                fullMenuItems.length - 1 === index
-                  ? _setContactRoute
-                  : _setHomeRoute
+                fullMenuItems.length - 1 === index ? _setContactRoute : _setHomeRoute
               }
               anchor
               index={index}
               HTMLClass={`itemBurgerMenu ${
-                fullMenuItems.length - 1 === index
-                  ? 'lastMenuItem'
-                  : ''
+                fullMenuItems.length - 1 === index ? 'lastMenuItem' : ''
               }`}
               label={item.toLocaleUpperCase()}
               to={item}

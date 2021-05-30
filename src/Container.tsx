@@ -3,18 +3,8 @@ import { debounce, throttle } from 'lodash'
 
 import StoreContext from './context/storeContext'
 
-import {
-  blockScroll,
-  Data,
-  detectHashOnScroll,
-  getPositionOfEachSections,
-} from './utils'
-import {
-  Loader,
-  Menu,
-  Page,
-  PageWithScroll,
-} from './components'
+import { blockScroll, Data, detectHashOnScroll, getPositionOfEachSections } from './utils'
+import { Loader, Menu, Page, PageWithScroll } from './components'
 
 import './app.css'
 import Contact from './components/contact/Contact'
@@ -73,11 +63,7 @@ class Container extends Component<{}, StateContainer> {
         (state) => ({
           event: { ...state.event, detectHash: true },
         }),
-        () =>
-          window.addEventListener(
-            'scroll',
-            this._detectHashOnScroll
-          )
+        () => window.addEventListener('scroll', this._detectHashOnScroll)
       )
     }
   }
@@ -107,10 +93,7 @@ class Container extends Component<{}, StateContainer> {
           }),
           () => {
             setTimeout(() => {
-              window.addEventListener(
-                'scroll',
-                this._detectHashOnScroll
-              )
+              window.addEventListener('scroll', this._detectHashOnScroll)
             }, 750)
           }
         )
@@ -121,10 +104,7 @@ class Container extends Component<{}, StateContainer> {
         this.setState((state) => ({
           event: { ...state.event, detectHash: false },
         }))
-        window.removeEventListener(
-          'scroll',
-          this._detectHashOnScroll
-        )
+        window.removeEventListener('scroll', this._detectHashOnScroll)
       }
     }
     // END MOBILE EVENT
@@ -150,34 +130,21 @@ class Container extends Component<{}, StateContainer> {
     window.addEventListener('wheel', blockScroll, {
       passive: false,
     })
-    window.addEventListener(
-      'scroll',
-      this._detectHashOnScroll
-    )
+    window.addEventListener('scroll', this._detectHashOnScroll)
   }
 
   static enableSmoothScrool() {
-    window.addEventListener(
-      'wheel',
-      Container._throttleSmoothScrool
-    )
+    window.addEventListener('wheel', Container._throttleSmoothScrool)
   }
 
   static disableSmoothScrool() {
-    window.removeEventListener(
-      'wheel',
-      Container._throttleSmoothScrool
-    )
+    window.removeEventListener('wheel', Container._throttleSmoothScrool)
   }
 
-  static _throttleSmoothScrool = throttle(
-    Container._smoothScroll,
-    1000,
-    {
-      leading: true,
-      trailing: false,
-    }
-  )
+  static _throttleSmoothScrool = throttle(Container._smoothScroll, 1000, {
+    leading: true,
+    trailing: false,
+  })
 
   _debounceResize = debounce(() => {
     const { isMobile, toggleState } = this.context.mobile
@@ -197,24 +164,16 @@ class Container extends Component<{}, StateContainer> {
     }
     down ? Container.URL++ : Container.URL--
     window.location.hash = menuItems[Container.URL]
-    sessionStorage.setItem(
-      'tabsIndex',
-      Container.URL.toString()
-    )
+    sessionStorage.setItem('tabsIndex', Container.URL.toString())
   }
 
   _detectHashOnScroll = () => {
     if (typeof this.sections === 'undefined') {
       this.sections = document.querySelectorAll('section')
-      this.positionSections = getPositionOfEachSections(
-        this.sections
-      )
+      this.positionSections = getPositionOfEachSections(this.sections)
     }
 
-    Container.URL = detectHashOnScroll(
-      this.sections,
-      this.positionSections
-    )
+    Container.URL = detectHashOnScroll(this.sections, this.positionSections)
   }
 
   _setLoaderEndend = (): void => {
@@ -236,9 +195,7 @@ class Container extends Component<{}, StateContainer> {
       const link = menuLinks[i].href.split('#')[1]
       if (this.context.scrollManagement.hash === '') {
         menuLinks[0].id = 'active'
-      } else if (
-        `#${link}` === this.context.scrollManagement.hash
-      ) {
+      } else if (`#${link}` === this.context.scrollManagement.hash) {
         menuLinks[i].id = 'active'
       }
     }
@@ -250,10 +207,7 @@ class Container extends Component<{}, StateContainer> {
 
   render() {
     return (
-      <div
-        className='App'
-        style={{ display: 'flex', flexFlow: 'wrap' }}
-      >
+      <div className='App' style={{ display: 'flex', flexFlow: 'wrap' }}>
         {!this.state.loaderEndend && (
           <Loader
             isMobile={this.context.mobile.isMobile}
@@ -264,28 +218,21 @@ class Container extends Component<{}, StateContainer> {
         {this.state.loaderStarted && (
           <>
             <Menu
-              menuConfiguration={
-                this.context.content.menuConfiguration
-              }
+              menuConfiguration={this.context.content.menuConfiguration}
               isMobile={this.context.mobile.isMobile}
               toggleMenu={this.context.menu.toggleState}
               menuIsOpen={this.context.menu.isOpen}
               setRoute={this.setRoute}
+              route={this.state.route}
             />
 
             {this.state.route === 'home' && (
               <>
-                {Object.keys(
-                  this.context.content.pagesWithSlider
-                ).map((page, i) => (
+                {Object.keys(this.context.content.pagesWithSlider).map((page, i) => (
                   <Page
                     anchor={page}
                     key={i}
-                    sliderImg={
-                      this.context.content.pagesWithSlider[
-                        page
-                      ]
-                    }
+                    sliderImg={this.context.content.pagesWithSlider[page]}
                   />
                 ))}
                 {this.lastPage && (
@@ -294,8 +241,7 @@ class Container extends Component<{}, StateContainer> {
                     isMobile={this.context.mobile.isMobile}
                     previousAnchor={
                       this.context.content.menuItems[
-                        this.context.content.menuItems
-                          .length - 2
+                        this.context.content.menuItems.length - 2
                       ]
                     }
                   />

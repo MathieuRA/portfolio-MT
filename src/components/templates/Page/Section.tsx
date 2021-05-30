@@ -1,12 +1,5 @@
 import { debounce, throttle } from 'lodash'
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { Fade } from '..'
 
@@ -22,8 +15,7 @@ interface PropsSection {
   section: string
 }
 const Section: FC<PropsSection> = ({ section }) => {
-  const [activeSection, setActiveSection] =
-    useState(Boolean)
+  const [activeSection, setActiveSection] = useState(Boolean)
   const [scrollEnded, setScrollEnded] = useState(true)
   const isMobile = window.innerWidth <= 1024
 
@@ -32,8 +24,7 @@ const Section: FC<PropsSection> = ({ section }) => {
   // Only mount the active component
   useEffect(() => {
     setActiveSection(
-      `#${section}` === window.location.hash ||
-        window.location.hash === ''
+      `#${section}` === window.location.hash || window.location.hash === ''
     )
   }, [store.scrollManagement.hash])
 
@@ -68,24 +59,14 @@ const Section: FC<PropsSection> = ({ section }) => {
     () => Data.getInstance().getContent(section),
     [section]
   )
-  const { text, title, video } = useMemo(
-    () => contents,
-    [contents]
-  )
+  const { text, title, video } = useMemo(() => contents, [contents])
 
-  const displayModal = useCallback(
-    () => displayModalvideo(video),
-    [video]
-  )
+  const displayModal = useCallback(() => displayModalvideo(video), [video])
 
   return (
     <div className='section'>
       {
-        <Fade
-          show={
-            isMobile ? true : activeSection && scrollEnded
-          }
-        >
+        <Fade show={isMobile ? true : activeSection && scrollEnded}>
           <h1
             dangerouslySetInnerHTML={{
               __html: title.toUpperCase(),
@@ -106,8 +87,8 @@ const Section: FC<PropsSection> = ({ section }) => {
               display: 'block',
               margin: 'auto',
               padding: 15,
-              fontSize: '1em',
-              position: 'relative',
+              fontSize: isMobile ? '0.6em' : '1em',
+              transform: 'translate(0, 0)',
               fontFamily: 'aqua, nunito-regular, serif',
             }}
             onClick={displayModal}

@@ -39,8 +39,7 @@
 #menu {
   display: flex;
   justify-content: space-between;
-  left: 2%;
-  padding-top: 10px;
+  padding: 10px 2%;
   position: fixed;
   font-family: 'montserrat';
   width: 96%;
@@ -107,8 +106,8 @@
 .customLink:hover::after {
   border-top-color: var(--main-gold);
   border-right-color: var(--main-gold);
-  transition: border-color 0s ease-out 0.25s,
-    width 0.25s ease-out 0.25s, height 0.25s ease-out 0.25s;
+  transition: border-color 0s ease-out 0.25s, width 0.25s ease-out 0.25s,
+    height 0.25s ease-out 0.25s;
 }
 
 #menu .divisedMenu a:hover,
