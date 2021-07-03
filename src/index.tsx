@@ -16,9 +16,6 @@ ReactDOM.render(
 
 serviceWorkerRegistration.register({
   onUpdate: (registration) => {
-    alert(
-      "Nouvelle version disponible. L'application va recharger."
-    )
     if (registration && registration.waiting) {
       registration.waiting.postMessage({
         type: 'SKIP_WAITING',

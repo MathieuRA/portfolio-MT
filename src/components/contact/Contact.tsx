@@ -1,7 +1,5 @@
-import { resolve } from 'node:url'
 import {
   ChangeEventHandler,
-  createRef,
   FC,
   FormEventHandler,
   useEffect,
@@ -10,7 +8,11 @@ import {
 } from 'react'
 import Container from '../../Container'
 
-import { formIsValid, isValidAntispam, isValidInput } from '../../utils'
+import {
+  formIsValid,
+  isValidAntispam,
+  isValidInput,
+} from '../../utils'
 import Spinner from '../spinner/Spinner'
 
 import './contact.css'
@@ -23,8 +25,10 @@ const Contact: FC = () => {
   const [message, setMessage] = useState<string>()
   const [requestSend, setRequestSend] = useState(false)
   const [validForm, setValidForm] = useState(false)
-  const [error, setError] = useState<string | undefined>(undefined)
-  const [success, setSuccess] = useState<string | undefined>(undefined)
+  const [error, setError] =
+    useState<string | undefined>(undefined)
+  const [success, setSuccess] =
+    useState<string | undefined>(undefined)
 
   const isMobile = window.innerWidth <= 1024
 
@@ -35,64 +39,70 @@ const Contact: FC = () => {
     }
   }, [])
 
-  const _checkNameValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { currentTarget } = e
-    if (
-      isValidInput(currentTarget, 'text', {
-        max: 40,
-        min: 2,
-      })
-    ) {
-      setName(currentTarget.value)
+  const _checkNameValidity: ChangeEventHandler<HTMLInputElement> =
+    (e) => {
+      const { currentTarget } = e
+      if (
+        isValidInput(currentTarget, 'text', {
+          max: 40,
+          min: 2,
+        })
+      ) {
+        setName(currentTarget.value)
+      }
     }
-  }
-  const _checkMailValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { currentTarget } = e
-    if (
-      isValidInput(currentTarget, 'email', {
-        max: 50,
-        min: 5,
-      })
-    ) {
-      setEmail(currentTarget.value)
+  const _checkMailValidity: ChangeEventHandler<HTMLInputElement> =
+    (e) => {
+      const { currentTarget } = e
+      if (
+        isValidInput(currentTarget, 'email', {
+          max: 50,
+          min: 5,
+        })
+      ) {
+        setEmail(currentTarget.value)
+      }
     }
-  }
 
-  const _checkSubjectValidity: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { currentTarget } = e
-    if (
-      isValidInput(currentTarget, 'text', {
-        max: 30,
-        min: 3,
-      })
-    ) {
-      setSubject(currentTarget.value)
+  const _checkSubjectValidity: ChangeEventHandler<HTMLInputElement> =
+    (e) => {
+      const { currentTarget } = e
+      if (
+        isValidInput(currentTarget, 'text', {
+          max: 30,
+          min: 3,
+        })
+      ) {
+        setSubject(currentTarget.value)
+      }
     }
-  }
 
-  const _checkTextareaValidity: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    const { currentTarget } = e
-    if (
-      isValidInput(currentTarget, 'text', {
-        max: 300,
-        min: 10,
-      })
-    ) {
-      setMessage(currentTarget.value)
+  const _checkTextareaValidity: ChangeEventHandler<HTMLTextAreaElement> =
+    (e) => {
+      const { currentTarget } = e
+      if (
+        isValidInput(currentTarget, 'text', {
+          max: 300,
+          min: 10,
+        })
+      ) {
+        setMessage(currentTarget.value)
+      }
     }
-  }
 
-  const _formIsValid: ChangeEventHandler<HTMLFormElement> = (e) => {
-    if (!formIsValid(e.currentTarget)) {
-      setValidForm(false)
-      return
+  const _formIsValid: ChangeEventHandler<HTMLFormElement> =
+    (e) => {
+      if (!formIsValid(e.currentTarget)) {
+        setValidForm(false)
+        return
+      }
+      setValidForm(true)
     }
-    setValidForm(true)
-  }
 
-  const _checkAntispam: ChangeEventHandler<HTMLInputElement> = (e) => {
-    isValidAntispam(e.currentTarget, 2)
-  }
+  const _checkAntispam: ChangeEventHandler<HTMLInputElement> =
+    (e) => {
+      isValidAntispam(e.currentTarget, 2)
+    }
 
   const _submitForm: FormEventHandler = async (e) => {
     e.preventDefault()
@@ -100,23 +110,21 @@ const Contact: FC = () => {
       return null
     }
 
-    setRequestSend(true)
-    // Simule http request
-    const request = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (Date.now() % 2 === 1) {
-          console.log('ok')
-          reject('')
-        } else {
-          resolve('')
-        }
-      }, 1000)
-    })
     try {
-      await request
+      setRequestSend(true)
+      await fetch('https://nexio-films.fr/mail', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          subject,
+          message,
+        }),
+      })
       form.current?.reset()
       setError(undefined)
-      setSuccess('Message arriver à destination !')
+      setSuccess('E-mail arriver à destination !')
       setName(undefined)
       setEmail(undefined)
       setSubject(undefined)
@@ -142,10 +150,24 @@ const Contact: FC = () => {
         }}
       >
         {error !== undefined && (
-          <p style={{ backgroundColor: '#ff9090', padding: 10 }}>{error}</p>
+          <p
+            style={{
+              backgroundColor: '#ff9090',
+              padding: 10,
+            }}
+          >
+            {error}
+          </p>
         )}
         {success !== undefined && (
-          <p style={{ backgroundColor: '#95e69e', padding: 10 }}>{success}</p>
+          <p
+            style={{
+              backgroundColor: '#95e69e',
+              padding: 10,
+            }}
+          >
+            {success}
+          </p>
         )}
         <div
           style={{
@@ -205,8 +227,14 @@ const Contact: FC = () => {
             required
           />
         </div>
-        <small>* Les caractères spéciaux ne sont pas autorisés</small>
-        {validForm && <button>Envoyer {requestSend && <Spinner />}</button>}
+        <small>
+          * Les caractères spéciaux ne sont pas autorisés
+        </small>
+        {validForm && (
+          <button>
+            Envoyer {requestSend && <Spinner />}
+          </button>
+        )}
       </form>
     </section>
   )

@@ -9,9 +9,8 @@ export const formIsValid = (
 ): boolean => {
   const input = form.getElementsByTagName('input')
   const textarea = form.getElementsByTagName('textarea')
-  const validInput = form.getElementsByClassName(
-    'validInput'
-  )
+  const validInput =
+    form.getElementsByClassName('validInput')
   const formLenght = input.length + textarea.length
 
   return validInput.length === formLenght
@@ -99,6 +98,6 @@ const _lenghtIsValid = (
 }
 
 const _textIsValid = (string: string) => {
-  const regexp = new RegExp(/[(<>/;:+.$£*`'"#~?)]/)
+  const regexp = new RegExp(/[(<>~)]/)
   return !regexp.test(string)
 }
